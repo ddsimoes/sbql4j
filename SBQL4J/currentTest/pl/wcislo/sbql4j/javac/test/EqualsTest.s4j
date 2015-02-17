@@ -1,0 +1,61 @@
+package pl.wcislo.sbql4j.javac.test;
+
+import pl.wcislo.sbql4j.java.test.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+
+public class EqualsTest {
+	
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	new EqualsTest();
+	}
+    
+    public EqualsTest() {
+    	test1();
+	}
+	
+    public void test1() {
+    	Date date1 = new Date();
+    	Date date2 = new Date();
+    	String city = "";
+    	String street = "";
+    	String postCode = "asdf";
+    	int i = 1;
+//    	String c = #{ postCode.substring(i, i+1) };
+//    	String res = #{ EqualsTest.testException() + EqualsTest.testException2() + "napis" + 5 };
+//    	Date res2 = #{ new java.util.Date(System.currentTimeMillis()) };
+//    	System.out.println( res );
+    }
+    
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+    
+    
+    public static String testException() throws Exception {
+    	return "testEX1";
+    }
+    
+    public static String testException2() throws Exception {
+    	return "testEX2";
+    }
+}

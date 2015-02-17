@@ -1,0 +1,191 @@
+package pl.wcislo.sbql4j.javac.test.db4o;
+
+//import pl.wcislo.sbql4j.java.test.model.*;
+import pl.wcislo.sbql4j.java.model.runtime.*;
+/*
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+import pl.wcislo.sbql4j.javac.test.db4o.model.*;
+*/
+
+import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+import com.db4o.*;
+
+
+public class Db4oOperatorTest {
+	private ObjectContainer dbConn;
+	
+	
+//    @SuppressWarnings("all")
+//	public static void main(String[] args) {
+//    	new Db4oOperatorTest();
+//	}
+//    
+//    public Db4oOperatorTest() {
+//    	getConnection();
+////    	try {
+//    		prepareData();
+////    		test1();
+////    		test2();
+////    	} finally {
+////    		getConnection().close();
+////    	}
+//    	
+//	}
+//    
+//    public ObjectContainer getConnection() {
+//    	if(dbConn == null) {
+//    		dbConn = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "testOperators.db");
+//    	}
+//    	return dbConn;
+//    }
+//    
+//    private void prepareData() {
+//    	ObjectContainer con = getConnection();
+//    	List<Emp> empList = new ArrayList<Emp>();
+//    	List<Emp.Book> b1List = new ArrayList<Emp.Book>();
+//        b1List.add(new Emp.Book("Juliusz S\u0142owacki", "Kordian"));
+//        empList.add(new Emp("s0000", "Anna", "Kowalska", new Emp.Address("al. Jerozolimskie", 50, "00-111", "Warszawa"), true, b1List));
+//        List<Emp.Book> b2List = new ArrayList<Emp.Book>();
+//        b2List.add(new Emp.Book("Adam Mickiewicz", "Pan Tadeusz"));
+//        b2List.add(new Emp.Book("Aleksander Dumas (syn)", "Dama kameliowa"));
+//        empList.add(new Emp("s0001", "Maciej", "Nowak", new Emp.Address("Koszykowa", 86, "00-222", "Warszawa"), true, b2List ));
+//    	LinqExampleData data = new LinqExampleData();
+//    	ObjectSet<Emp> emp = con.query(Emp.class);
+//    	if(emp.isEmpty()) {
+//    		for(Emp e : empList) {
+//    			con.store(e);
+//    		}
+//    	}
+//    }
+//	
+//    public Boolean testAll1() {
+////    	System.out.println("1. #{ db.(all 1 true) }");
+//    	ObjectContainer db = getConnection();
+//		Boolean res = #{ db.(all 1 true) };
+//		return res;
+////		System.out.println(res);
+//    }
+//    
+//    public Boolean testAll2() {
+//    	ObjectContainer db = getConnection();
+//		Boolean res = #{ db.(all Emp married) };
+//		return res;
+//    }
+//    
+//    public Boolean testAnd1() {
+//    	ObjectContainer db = getConnection();
+//		Boolean res = #{ db.(true and false) };
+//		return res;
+//    }
+//    public Boolean testAny1() {
+//    	ObjectContainer db = getConnection();
+//		Boolean res = #{ db.(any 1 true) };
+//		return res;
+//    }
+//    public Boolean testAny2() {
+//    	ObjectContainer db = getConnection();
+//		Boolean res = #{ db.(any Emp married) };
+//		return res;
+//    }
+//    public Collection<Integer> testBag1() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Integer> res = #{ db.(bag(1,2)) };
+//		return res;
+//    }
+//    public Collection<Integer> testBag2() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Integer> res = #{ db.(bag(1)) };
+//		return res;
+//    }
+//    public Collection<Integer> testBag3() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Integer> res = #{ db.(bag(1+2,3)) };
+//		return res;
+//    }
+//    public Collection<Integer> testBag4() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Integer> res = #{ db.(bag(bag(1,2,3))) };
+//		return res;
+//    }
+//    public Struct testComma1() {
+//    	ObjectContainer db = getConnection();
+//    	Struct res = #{ db.(1,2) };
+//		return res;
+//    }
+//    public Collection<Struct> testComma2() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Struct> res = #{ db.(bag(1,2),3) };
+//		return res;
+//    }
+//    public Collection<Struct> testComma3() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<Struct> res = #{ db.(bag(1,2),bag(3,4)) };
+//		return res;
+//    }
+//    public Integer testDivide1() {
+//    	ObjectContainer db = getConnection();
+//    	Integer res = #{ db.(10 / 5) };
+//		return res;
+//    }
+//    public Double testDivide2() {
+//    	ObjectContainer db = getConnection();
+//    	Double res = #{ db.(5 / 3.5) };
+//		return res;
+//    }
+//    public Double testDivide3() {
+//    	ObjectContainer db = getConnection();
+//    	Double res = #{ db.(3.5 / 5) };
+//		return res;
+//    }
+//    public Double testDivide4() {
+//    	ObjectContainer db = getConnection();
+//    	Double res = #{ db.(3.5 / 5.5) };
+//		return res;
+//    }
+//    public Collection<String> testDot1() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<String> res = #{db.(Emp.address.street)};
+//    	return res;
+//    }
+//    public Collection<String> testDot2() {
+//    	ObjectContainer db = getConnection();
+//    	Collection<String> res = #{db.(bag(1,2).("Ala"))};
+//    	return res;
+//    }
+//    public String testDot3() {
+//    	ObjectContainer db = getConnection();
+//    	String res = #{db.((1,2).("Ala"))};
+//    	return res;
+//    }
+//    public Collection<String> testDot4() {
+//    	Collection<String> res = #{ bag(1,2).("Ala") };
+//    	return res;
+//    }
+//    public Collection<String> testDot5() {
+//    	Collection<String> res = #{ bag(bag(1,2),3).("Ala") };
+//    	return res;
+//    }
+    
+    public boolean boolTest1() {
+    	Boolean res = #{true || false};
+    	return res;
+    }
+    
+    public boolean boolTest2() {
+    	Boolean res = #{true && false};
+    	return res;
+    }
+    
+    
+}

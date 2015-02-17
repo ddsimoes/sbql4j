@@ -1,0 +1,40 @@
+package pl.wcislo.sbql4j.javac.test;
+
+//import pupa.*;
+//import java.io.Reader;
+//import java.io.StringWriter;
+//import java.lang.Math;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+
+public class LiteralTest {
+
+//    private String field1;
+//    private static String field2;
+	
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	String s = "Ala ma kota";
+//    	Object result;
+//    	List<String> result = #{s.split(" ") as word where word.length() > 2 and Character.isUpperCase(word.charAt(0)) };
+//    	System.out.println(result);
+    	
+//    	List<Integer> res2 = #{bag ArrayList n where self > 5 order by self};
+//    	List<Integer> res2 = #{sequence<LinkedList> (n)};
+    	Integer[] n = new Integer[] {4, 2, 6, 20, 4, 23, 1, 5, 7};
+    	List<Integer> result = #{ n where self > 7 };
+    	System.out.println(result);
+    	
+	}
+
+	
+	
+
+}

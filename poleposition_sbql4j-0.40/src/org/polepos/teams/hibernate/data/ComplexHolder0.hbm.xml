@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.polepos.teams.hibernate.data">
+	<class name="ComplexHolder0" table="tComplexHolder0">
+		<id name="id" column="fid" type="long" />
+		<property name="name" column="fname" type="string"/>
+		<list name="children" access="field" cascade="all">
+			<key column="parentId" />
+			<index column="elementIndex"/>
+			<many-to-many class="ComplexHolder0" />
+		</list>
+		<array name="array" access="field" cascade="all">
+			<key column="parentId" />
+			<index column="elementIndex"/>
+			<many-to-many class="ComplexHolder0"/>
+		</array>
+		<joined-subclass name="ComplexHolder1" table="tComplexHolder1">
+			<key column="parent0"/>
+			<property name="i1"		column="i1"		type="int"/>
+			<joined-subclass name="ComplexHolder2" table="tComplexHolder2">
+				<key column="parent1"/>
+				<property name="i2"		column="i2"		type="int"    index="i2_idx"/>
+				<joined-subclass name="ComplexHolder3" table="tComplexHolder3">
+					<key column="parent2"/>
+					<property name="i3"		column="i3"		type="int"/>
+					<joined-subclass name="ComplexHolder4" table="tComplexHolder4">
+						<key column="parent3"/>
+						<property name="i4"		column="i4"		type="int"/>
+					</joined-subclass>
+				</joined-subclass>
+			</joined-subclass>
+		</joined-subclass>
+	</class>
+</hibernate-mapping>

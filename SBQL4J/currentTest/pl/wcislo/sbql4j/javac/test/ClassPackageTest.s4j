@@ -1,0 +1,31 @@
+package pl.wcislo.sbql4j.javac.test;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+
+import pl.wcislo.sbql4j.java.model.runtime.*;
+
+public class ClassPackageTest {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+//    	List<Double> o = #{
+//    		(nums as n).
+//    		(new java.lang.Double(Math.floor(n + 0.5)))
+//    	};
+//		System.out.println(o);
+		
+		List<Integer> emptyList = new ArrayList<Integer>();
+//		Integer nullInt = null;
+		List<Integer> res2 = #{
+			(nums as n, emptyList).
+    		(n)
+    	};
+		System.out.println(res2);
+	}
+
+}

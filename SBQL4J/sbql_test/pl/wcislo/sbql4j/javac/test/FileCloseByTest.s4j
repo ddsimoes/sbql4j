@@ -1,0 +1,32 @@
+package pl.wcislo.sbql4j.javac.test;
+
+import java.io.File;
+import java.io.IOException;
+
+
+public class FileCloseByTest {
+
+	public String pupa;
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new FileCloseByTest();
+	}
+	
+	public FileCloseByTest() {
+	//	File f = new File("D:/delete/");
+	//	Object res = # (((:f closeby listFiles()) where getName().toLowerCase().endsWith(".pdf")).getAbsolutePath() as plik) #;
+		
+		File f1 = new File("D:/delete/");
+		Object res = #{ (((f1 
+				close by listFiles()) where getName().toLowerCase().endsWith(".pdf")).delete()) }; 
+		
+//		try {
+			System.out.println(res);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+	}
+}

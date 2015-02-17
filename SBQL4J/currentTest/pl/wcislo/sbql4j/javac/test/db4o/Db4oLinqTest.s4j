@@ -1,0 +1,1656 @@
+package pl.wcislo.sbql4j.javac.test.db4o;
+
+import pl.wcislo.sbql4j.java.test.model.*;
+import pl.wcislo.sbql4j.java.model.runtime.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+import com.db4o.*;
+
+
+public class Db4oLinqTest {
+	private ObjectContainer db;
+	
+	
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	new Db4oLinqTest();
+	}
+    
+    public Db4oLinqTest() {
+    	getConnection();
+//    	try {
+    		prepareData();
+//    		linq2();
+//    		linq3();
+//    	} finally {
+//    		getConnection().close();
+//    	}
+    	
+	}
+    
+    public ObjectContainer getConnection() {
+    	if(db == null) {
+    		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "testLinq.db");
+    	}
+    	return db;
+    }
+    
+    private void prepareData() {
+    	ObjectContainer con = getConnection();
+    	LinqExampleData data = new LinqExampleData();
+    	ObjectSet<Customer> cust = con.query(Customer.class);
+    	if(cust.isEmpty()) {
+    		for(Customer c : data.getCustomerList()) {
+    			con.store(c);
+    		}
+    	}
+    	ObjectSet<Product> prd = con.query(Product.class);
+    	if(prd.isEmpty()) {
+    		for(Product p : data.getProductList()) {
+    			con.store(p);
+    		}
+    	}
+    	con.commit();
+    }
+	
+    
+    /**
+     * This sample uses where to find all products that are out of stock.
+     * 
+     * Orginal LINQ query:
+     * from p in products
+	 * where p.UnitsInStock == 0
+	 * select p;
+     */
+    public Collection<Product> linq2() {
+    	Collection<Product> soldOutProducts  = #{
+    		db.(Product where unitsInStock == 0)
+    	};
+    	//System.out.println("Sold out products:");
+        for(Product product : soldOutProducts) {
+        	//System.out.printf("%s is sold out!\n", product.productName);
+        }
+        return soldOutProducts;
+    }
+	
+    /**
+     * This sample uses where to find all products that are in stock and cost more than 3.00 per unit.
+     * 
+     * Orginal LINQ query:
+     * from p in products
+     *      where p.UnitsInStock > 0 && p.UnitPrice > 3.00M
+     *      select p;
+     */
+    public Collection<Product> linq3() {
+    	Collection<Product> expensiveInStockProducts = #{
+    		db.(Product where unitsInStock > 0 and unitPrice > 3.00)
+    	};
+    	//System.out.println("In-stock products that cost more than 3.00:");
+        for(Product product : expensiveInStockProducts) {
+        	//System.out.printf("%s is in stock and costs more than 3.00.\n", product.productName);
+        }
+        return expensiveInStockProducts;
+    }
+    
+    /**
+     * This sample uses where to find all customers in Washington and then 
+     * uses the resulting sequence to drill down into their orders.
+     * 
+     * Orginal LINQ query:
+     * from c in customers
+     *         where c.Region == "WA"
+     *          select c;
+     */
+    public Collection<Customer> linq4() {
+//    	List<Customer> customers = getCustomerList();
+    	Collection<Customer> waCustomers = #{
+    		db.(Customer where region == "WA")
+    	};
+    	//System.out.println("Customers from Washington and their orders:");
+    	for(Customer customer : waCustomers) {
+    		//System.out.printf("Customer %s: %s\n", customer.customerID, customer.companyName);
+    		for(Order order : customer.orders) {
+    			//System.out.printf("  Order %s: %s\n", order.orderID, order.orderDate);
+    		}
+    	}
+    	return waCustomers;
+    }
+//    
+//    /**
+//     * This sample demonstrates an indexed Where clause that 
+//     * returns digits whose name is shorter than their value.
+//     * 
+//     * Orginal LINQ query:
+//     * digits.Where((digit, index) => digit.Length < index);
+//     */
+//    public void linq5() {
+//    	String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//    	List<String> shortDigits = #{
+//    		digits where length() < $index
+//    	};
+//    	//System.out.println("Short digits:");
+//    	for(String d : shortDigits) {
+//    		//System.out.printf("The word %s is shorter than its value.\n", d);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses select to produce a sequence of 
+//     * ints one higher than those in an existing array of ints.
+//     * 
+//     * Orginal LINQ query:
+//     * from n in numbers
+//	 * select n + 1;
+//     */
+//    public void linq6() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	List<Integer> numsPlusOne = #{
+//    		(numbers as n).
+//    		(n + 1)
+//    	};
+//    	//System.out.println("Numbers + 1:");
+//      	for(Integer i : numsPlusOne) {
+//      		//System.out.println(i);
+//      	}
+//    }
+//    
+    /**
+     * This sample uses select to return a sequence of just the names of a list of products.
+     * 
+     * Orginal LINQ query:
+     * from p in products
+	 * select p.ProductName;
+     */
+    public Collection<String> linq7() {
+//    	List<Product> products = getProductList();
+    	Collection<String> productNames = #{
+    		db.(Product.productName)
+    	};
+    	//System.out.println("Product Names:");
+    	for(String productName : productNames) {
+    		//System.out.println(productName);
+    	}
+    	return productNames;
+    }
+//    
+//    /**
+//     * This sample uses select to produce a sequence of strings representing 
+//     * the text version of a sequence of ints.
+//     * 
+//     * Orginal LINQ query:
+//     * from n in numbers
+//	 * select strings[n];
+//     */
+//    public void linq8() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	String[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//    	List<String> textNums = #{
+//    		(numbers as n).
+//    		(strings[n])
+//    	};
+//    	//System.out.println("Number strings:");
+//    	for(String s : textNums) {
+//    		//System.out.println(s);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses select to produce a sequence of the uppercase
+//     * and lowercase versions of each word in the original array.
+//     * 
+//     * Orginal LINQ query:
+//     * from w in words
+//     * select new {Upper = w.ToUpper(), Lower = w.ToLower()};
+//     */
+//    public void linq9() {
+//    	String[] words = { "aPPLE", "BlUeBeRrY", "cHeRry" };
+//    	List<Struct> upperLowerWords = #{
+//    		(words).
+//    		(toUpperCase() as upper, toLowerCase() as lower)
+//    	};
+//    	for(Struct ul : upperLowerWords) {
+//    		//System.out.printf("Uppercase: %s, Lowercase: %s\n", ul.get("upper"), ul.get("lower"));
+//    	}
+//    	
+//    }
+//    
+//    /**
+//     * This sample uses select to produce a sequence containing text
+//     * representations of digits and whether their length is even or odd.
+//     * 
+//     * Orginal LINQ query:
+//     * from n in numbers
+//	 * select new {Digit = strings[n], Even = (n % 2 == 0)};
+//     */
+//    public void linq10() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	String[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//    	List<Struct> digitOddEvens = #{
+//    		(numbers as n).
+//    		(strings[n] as digit, (n % 2 == 0) as even)
+//    	};
+//    	for(Struct d : digitOddEvens) {
+//    		//System.out.printf("The digit %s is %s.\n", d.get("digit"), ((Boolean)d.get("even")) ? "even" : "odd");
+//    	}
+//    }
+//    
+    /**
+     * This sample uses select to produce a sequence containing some properties
+     * of Products, including UnitPrice which is renamed to Price
+     * in the resulting type.
+     * 
+     * Orginal LINQ query:
+     * from p in products
+     * select new {p.ProductName, p.Category, Price = p.UnitPrice};
+     */
+    public Collection<Struct> linq11() {
+//    	List<Product> products = getProductList();
+    	Collection<Struct> productInfos = #{
+    		db.((Product).
+        	(productName as productName, category as category, unitPrice as price))
+        };
+    	//System.out.println("Product Info:");
+    	for(Struct productInfo : productInfos) {
+    		//System.out.printf("%s is in the category %s and costs %s per unit.\n", productInfo.getValue(0), productInfo.getValue(1), productInfo.getValue(2));
+    	}
+    	return productInfos;
+    }
+//	
+//    /**
+//     * This sample uses an loop index to determine if the value of ints
+//     * in an array match their position in the array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Select((num, index) => new {Num = num, InPlace = (num == index)});
+//     */
+//    public void linq12() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	List<Struct> numsInPlace = #{ 
+//    		(numbers as num).
+//    		(num as num, (num == $index) as inPlace) 
+//    	}; 
+//    	//System.out.println("Number: In-place?");
+//    	for(Struct n : numsInPlace) {
+//    		//System.out.printf("%s: %s\n", n.get("num"), n.get("inPlace"));
+//    	}
+//    }
+//    
+//    /**
+//     * This sample combines select and where to make a simple query that returns
+//     * the text form of each digit less than 5.
+//     * 
+//     * Orginal LINQ query:
+//     * from n in numbers
+//     *      where n < 5
+//     *      select digits[n];
+//     */
+//    public void linq13() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//    	List<String> lowNums = #{ 
+//    		((numbers as n) where n < 5).
+//    		(digits[n]) 
+//    	};
+//    	//System.out.println("Numbers < 5:");
+//    	for(String num : lowNums) {
+//    		//System.out.println(num);
+//    	}
+//    }
+//    
+//    /**
+//	 *	This sample uses a compound from clause to make a query that returns all pairs
+//     *	of numbers from both arrays such that the number from numbersA is less than the number
+//     *  from numbersB.
+//     *  
+//     *  Orginal LINQ query:
+//     *  from a in numbersA
+//     *      from b in numbersB
+//     *      where a < b
+//     *      select new { a, b };
+//     */
+//    public void linq14() {
+//        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+//        int[] numbersB = { 1, 3, 5, 7, 8 };
+//        List<Struct> pairs = #{ 
+//        	numbersA as a, numbersB as b 
+//        	where a < b 
+//        };
+//        //System.out.println("Pairs where a < b:");
+//        for(Struct pair : pairs) {
+//        	//System.out.printf("%s is less than %s\n", pair.get("a"), pair.get("b"));
+//        }
+//    }
+//    
+    /**
+	 * This sample uses a compound from clause to select all orders where the
+     * order total is less than 500.00.
+     *
+     * Orginal LINQ query:
+     * from c in customers
+     *      from o in c.Orders
+     *      where o.Total < 500.00M
+     *      select new {c.CustomerID, o.OrderID, o.Total};
+     */
+    public Collection<Struct> linq15() {
+//    	List<Customer> customers = getCustomerList();
+    	Collection<Struct> orders = #{
+    		db.(
+    		 ((Customer where exists (orders where total < 500.00) join (orders where total < 500.00))).
+    		 (customerID as customerId, orderID as orderID, total as total)
+    		)
+    	};
+//		, orderID as orderID, total as total
+    	for(Struct order : orders) {
+    		//System.out.println(order);
+    	}
+    	return orders;
+    }
+    
+    /**
+     * This sample uses a compound from clause to select all orders 
+     * where the order was made in 1998 or later.
+     * 
+     * Orginal LINQ query:
+     * 
+     * from c in customers
+	 * from o in c.Orders
+	 * where o.OrderDate >= new DateTime(1998, 1, 1)
+	 * select new { c.CustomerID, o.OrderID, o.OrderDate };
+     */
+    public Collection<Struct> linq16() {
+//    	List<Customer> customers = getCustomerList();
+    	Calendar c = Calendar.getInstance();
+    	c.set(1998, Calendar.JANUARY, 1);
+    	Date d = c.getTime();
+    	Collection<Struct> orders = #{
+    		db.(( Customer where exists (orders where orderDate > d) 
+    				join orders where orderDate > d).
+    		(customerID as customerID, orderID as orderID, orderDate as orderDate))
+    	};
+    	for(Struct order : orders) {
+    		//System.out.println(order);
+    	}
+    	return orders;
+    }
+//    
+//    /**
+//     * This sample uses a compound from clause to select all orders where the order total 
+//     * is greater than 2000.00 and uses from assignment to avoid requesting the total twice.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     *      from o in c.Orders
+//     *      where o.Total >= 2000.0M
+//     *      select new { c.CustomerID, o.OrderID, o.Total };
+//     */
+//    public void linq17() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<Struct> orders = #{
+//    		(customers as c join (c.orders as o where o.total > 2000)).
+//    		(c.customerID as customerID, o.orderID as orderID, o.total as total)
+//    	};
+//		for(Struct order : orders) {
+//    		//System.out.println(order);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses multiple from clauses so that filtering on customers can be done 
+//     * before selecting their orders. This makes the query more efficient by not selecting 
+//     * and then discarding orders for customers outside of Washington.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     * where c.Region == "WA"
+//     * from o in c.Orders
+//     * where o.OrderDate >= cutoffDate
+//     * select new { c.CustomerID, o.OrderID };
+//     */
+//    public void linq18() {
+//    	List<Customer> customers = getCustomerList();
+//    	Calendar c = Calendar.getInstance();
+//    	c.set(1997, 0, 1);
+//    	Date cutoffDate = c.getTime();
+//    	List<Struct> orders = #{
+//    		(customers as c where c.region == "WA" join c.orders as o where o.orderDate >= cutoffDate).
+//    		(c.customerID as customerID, o.orderID as orderID)
+//    	};
+//    	for(Struct order : orders) {
+//    		//System.out.println(order);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample selects all orders, 
+//     * while referring to customers by the order in which they are returned from the query.
+//     * 
+//     * Orginal LINQ query:
+//     * customers.SelectMany(
+//     *          (cust, custIndex) =>
+//     *          cust.Orders.Select(o => "Customer #" + (custIndex + 1) +
+//     *                                  " has an order with OrderID " + o.OrderID));
+//     */
+//    public void linq19() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<String> customerOrders = #{
+//    		(customers as c).
+//    		($index as custIndex, c.orders as o).
+//    		("Customer #"+(custIndex + 1)+" has an order with OrderID "+o.orderID)
+//    	};
+//    	for(String s : customerOrders) {
+//    		//System.out.println(s);
+//    	}
+//    		
+//    }
+//    
+//    /**
+//     * This sample uses an range operator to get only the first 3 elements of the array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Take(3);
+//     */
+//    public void linq20() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	List<Integer> first3Numbers = #{numbers[0..2]};
+//    	for(Integer n : first3Numbers) {
+//    		//System.out.println(n);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an range operator to get the first 3 orders from customers in Washington.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     * from o in c.Orders
+//     * where c.Region == "WA"
+//     * select new { c.CustomerID, o.OrderID, o.OrderDate })
+//     * .Take(3);
+//     */
+//    public void linq21() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<Struct> first3WAOrders = #{
+//    		((customers where region == "WA" join orders)[0..2]).
+//    		(customerID as customerID, orderID as orderID, orderDate as orderDate)
+//    	};
+//    	//System.out.println("First 3 orders in WA:");
+//    	for(Struct order : first3WAOrders) {
+//    		//System.out.println(order);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an range operator to get all but the first 4 elements of the array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Skip(4);
+//     */
+//    public void linq22() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	List<Integer> allButFirst4Numbers = #{numbers[4..*]};
+//    	//System.out.println("All but first 4 numbers:");
+//    	for(Integer n : allButFirst4Numbers) {
+//    		//System.out.println(n);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an range operator to get all but the first 2 orders from customers in Washington.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     * from o in c.Orders
+//     * where c.Region == "WA"
+//     * select new { c.CustomerID, o.OrderID, o.OrderDate };
+//     */
+//    public void linq23() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<Struct> waOrders = #{ 
+//    		((customers as c where c.region == "WA" join c.orders as o)[2..*]).
+//    		(c.customerID as customerID, o.orderID as orderID, o.orderDate as orderDate)
+//    	};
+//    	//System.out.println("All but first 2 orders in WA:");
+//    	for(Struct order : waOrders) {
+//    		//System.out.println(order);
+//    	}
+//    }
+//    
+//// -----------------------------------------------------------    
+//// ----------------   Ordering Operators   -------------------    
+//// -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses orderby to sort a list of words alphabetically.
+//     * 
+//     * Orginal LINQ query:
+//     * from w in words
+//     * orderby w
+//     * select w;
+//     */
+//    public void linq28() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	List<String> sortedWords = #{ 
+//    		words as w order by w 
+//    	};
+//    	//System.out.println("The sorted list of words:");
+//    	for(String w : sortedWords) {
+//    		//System.out.println(w);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses orderby to sort a list of words by length.
+//     * 
+//     * Orginal LINQ query:
+//     * 
+//     * from w in words
+//     * orderby w.Length
+//     * select w;
+//     */
+//    public void linq29() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	List<String> sortedWords = #{ words as w order by w.length() };
+//    	//System.out.println("The sorted list of words (by length):");
+//    	for(String w : sortedWords) {
+//    		//System.out.println(w);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator to sort a list of products by name.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * orderby p.ProductName
+//     * select p;
+//     */
+//    public void linq30() {
+//    	List<Product> products = getProductList();
+//    	List<Product> sortedProducts = #{
+//    		products as p
+//    		order by p.productName
+//    	};
+//    	for(Product p : sortedProducts) {
+//    		//System.out.println(p);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator clause with a custom comparer to do 
+//     * a case-insensitive sort of the words in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.OrderBy(a => a, new CaseInsensitiveComparer());
+//     */
+//    public void linq31() {
+//    	String[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" };
+//        Comparator<String> comp = new Comparator<String>() {
+//			@Override
+//			public int compare(String o1, String o2) {
+//				return o1.toLowerCase().compareTo(o2.toLowerCase());
+//			}
+//		};
+//    	List<String> sortedWords = #{
+//    		words as w 
+//    		order by w using comp
+//    	};
+//    	for(String w : sortedWords) {
+//    		//System.out.println(w);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator and descending to 
+//     * sort a list of doubles from highest to lowest.
+//     * 
+//     * Orginal LINQ query:
+//     * from d in doubles
+//     * orderby d descending
+//     * select d;
+//     */
+//    public void linq32() {
+//        double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
+//        List<Double> sortedDoubles = #{
+//        	doubles as d
+//        	order by d desc
+//        };
+//        //System.out.println("The doubles from highest to lowest:");
+//        for(Double d : sortedDoubles) {
+//        	//System.out.println(d);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator to sort a list 
+//     * of products by units in stock from highest to lowest.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     *     orderby p.UnitsInStock descending
+//     *     select p;
+//     */
+//    public void linq33() {
+//        List<Product> products = getProductList();
+//        List<Product> sortedProducts = #{
+//        	products
+//        	order by unitsInStock desc
+//        };
+//        for(Product p : sortedProducts) {
+//        	//System.out.println(p);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator with a custom comparer to do a case-insensitive 
+//     * descending sort of the words in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.OrderByDescending(a => a, new CaseInsensitiveComparer());
+//     */
+//    public void linq34() {
+//    	String[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" };
+//    	
+//    	List<String> sortedWords = #{
+//    		words
+//    		order by toLowerCase() desc
+//    	};
+//    	for(String w : sortedWords) {
+//    		//System.out.println(w);
+//    	}
+//    }
+//
+//    /**
+//     * This sample uses an order by operator to sort a list of digits, 
+//     * first by length of their name, and then alphabetically by the name itself.
+//     * 
+//     * Orginal LINQ query:
+//     * from d in digits
+//     * orderby d.Length, d
+//     * select d;
+//     */
+//    public void linq35() {
+//        String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//        List<String> sortedDigits = #{
+//        	digits as d
+//        	order by d.length(); d
+//        };
+//        //System.out.println("Sorted digits:");
+//        for(String d : sortedDigits) {
+//        	//System.out.println(d);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator with a custom comparer to sort first
+//     * by word length and then by a case-insensitive sort of the words in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.OrderBy(a => a.Length)
+//     * .ThenBy(a => a, new CaseInsensitiveComparer());
+//     */
+//    public void linq36() {
+//        String[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" };
+//        Comparator<String> comp = new Comparator<String>() {
+//			@Override
+//			public int compare(String o1, String o2) {
+//				return o1.toLowerCase().compareTo(o2.toLowerCase());
+//			}
+//		};
+//        List<String> sortedWords = #{
+//        	words as w
+//        	order by w.length(); w using comp
+//        };
+//        for(String w : sortedWords) {
+//        	//System.out.println(w);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses an order by operator to sort a list of products,
+//     * first by category, and then by unit price, from highest to lowest.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * orderby p.Category, p.UnitPrice descending
+//     * select p;
+//     */
+//    public void linq37() {
+//        List<Product> products = getProductList();
+//        List<Product> sortedProducts = #{
+//        	products 
+//        	order by category; unitPrice desc
+//        };
+//        for(Product p : sortedProducts) {
+//        	//System.out.println(p);
+//        }
+//    }
+//
+//    /**
+//     * This sample uses an order by operator with a custom comparer to sort 
+//     * first by word length and then by a case-insensitive descending sort of the words in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.OrderBy(a => a.Length)
+//     * .ThenByDescending(a => a, new CaseInsensitiveComparer());
+//     */
+//    public void linq38() {
+//        Comparator<String> comp = new Comparator<String>() {
+//			@Override
+//			public int compare(String o1, String o2) {
+//				return o1.toLowerCase().compareTo(o2.toLowerCase());
+//			}
+//		};
+//        String[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" };
+//        List<String> sortedWords = #{
+//        	words as w
+//        	order by w.length(); w using comp
+//        };
+//        for(String w : sortedWords) {
+//        	//System.out.println(w);
+//        }
+//    }
+//    
+// // -----------------------------------------------------------    
+// // ----------------   Grouping Operators   -------------------    
+// // -----------------------------------------------------------
+//    
+//    
+//    /**
+//     * This sample partition a list of numbers by their remainder when divided by 5.
+//     * 
+//     * Orginal LINQ query:
+//     * from n in numbers
+//     * group n by n % 5 into g
+//     * select new { Remainder = g.Key, Numbers = g };
+//     */
+//    public void linq40() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	List<Struct> numberGroups = #{
+//    		(unique((numbers as n).(n % 5)) as r).
+//    		(r as remainder, (numbers as n where n % 5 == r) group as numbers)
+//    	};
+//    	//System.out.println(numberGroups);
+//    	
+//    	for(Struct g : numberGroups) {
+//    		//System.out.printf("Numbers with a remainder of %s when divided by 5:\n", g.get("remainder"));
+//    		List<Integer> numbersInGroup = (List<Integer>) g.get("numbers");
+//    		for(Integer n : numbersInGroup) {
+//    			//System.out.println(n);
+//    		}
+//    	}
+//    	
+//    }
+//    
+//    
+//    /**
+//     * This sample partition a list of words by their first letter.
+//     * 
+//     * Orginal LINQ query:
+//     * from w in words
+//     * group w by w[0] into g
+//     * select new { FirstLetter = g.Key, Words = g };
+//     */
+//    public void linq41() {
+//        String[] words = { "blueberry", "chimpanzee", "abacus", "banana", "apple", "cheese" };
+//        List<Struct> wordGroups = #{
+//        	(unique(words.charAt(0)) as f).
+//        	(f as firstLetter, (words as w where w.charAt(0) == f) group as words)	
+//        };
+//    	for(Struct g : wordGroups) {
+//			//System.out.printf("Words that start with the letter '%s':\n", g.get("firstLetter"));
+//			List<String> wordsInGroup = (List<String>) g.get("words");
+//			for(String w : wordsInGroup) {
+//				//System.out.println(w);
+//			}
+//		}
+//        
+//    }
+//    
+//    
+//    /**
+//     * This sample partition a list of products by category.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * select new { Category = g.Key, Products = g };
+//     */
+//    public void linq42() {
+//        List<Product> products = getProductList();
+//        List<Struct> orderGroups = #{
+//	        (unique(products.category) as c).
+//	        (c as category, (products where category == c) group as products)
+//        };
+//    	for(Struct g : orderGroups) {
+//			//System.out.printf("Products in category '%s':\n", g.get("category"));
+//			List<Product> productsInGroup = (List<Product>) g.get("products");
+//			for(Product p : productsInGroup) {
+//				//System.out.println(p);
+//			}
+//		}
+//    }
+//    
+//    
+//    /**
+//     * This sample partition a list of each 
+//     * customer's orders, first by year, and then by month.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     *  select
+//     *      new
+//     *      {
+//     *          c.CompanyName,
+//     *          YearGroups =
+//     *              from o in c.Orders
+//     *              group o by o.OrderDate.Year into yg
+//     *              select
+//     *                  new
+//     *                  {
+//     *                      Year = yg.Key,
+//     *                      MonthGroups =
+//     *                          from o in yg
+//     *                          group o by o.OrderDate.Month into mg
+//     *                          select new { Month = mg.Key, Orders = mg }
+//     *                  }
+//     *      };
+//     */
+//    public void linq43() {
+//    	List<Customer> customers = getCustomerList();
+//    	
+//		List<Struct> customerOrderGroups = #{
+//			(customers as c).
+//			(c.companyName as companyName join
+//			(                                 
+//			  ( unique(c.orders.orderDate.year ) as year join
+//			    (c.orders where orderDate.year == year) group as yearGroups
+//			  ). 
+//			    (year as year,
+//				  (
+//				    (unique(yearGroups.orderDate.month) as month) join                 
+//				    (yearGroups where orderDate.month == month) group as orders
+//				  ) group as monthGroups
+//				) group as yearGroups
+//			  )
+//			)
+//		};
+//    	
+////    	for(Struct companyGroup : customerOrderGroups) {
+////    		String companyName = (String) companyGroup.get("companyName");
+////    		System.out.println("Groups for company: "+companyName);
+////    		List<Struct> yearGroups = (List<Struct>) companyGroup.get("yearGroups");
+////    		if(yearGroups == null) continue;
+////    		for(Struct yearGroup : yearGroups) {
+////    			Integer year = (Integer)yearGroup.get("year");
+////    			System.out.println("    Groups for year: "+year);
+////    			List<Struct> monthGroups = (List<Struct>) yearGroup.get("monthGroups");
+////    			if(monthGroups == null) continue;
+////    			for(Struct monthGroup : monthGroups) {
+////    				Integer month = (Integer)monthGroup.get("month");
+////    				System.out.println("        Orders for month: "+month);
+////    				List<Order> orders = (List<Order>) monthGroup.get("orders");
+////    				for(Order order : orders) {
+////    					System.out.println("            "+order);
+////    				}
+////    			}
+////    		}
+////		}
+//    }
+//    
+//    // -----------------------------------------------------------    
+//    // -------------------   Set Operators  ----------------------    
+//    // -----------------------------------------------------------
+//
+//    /**
+//     * This sample uses unique operator to remove duplicate 
+//     * elements in a sequence of factors of 300.
+//     * 
+//     * Orginal LINQ query:
+//     * factorsOf300.Distinct();
+//     */
+//    public void linq46() {
+//        int[] factorsOf300 = { 2, 2, 3, 5, 5 };
+//        Collection<Integer> uniqueFactors = #{
+//        	unique(factorsOf300)
+//        };
+//        //System.out.println("Prime factors of 300:");
+//        for(Integer f : uniqueFactors) {
+//        	//System.out.println(f);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses unique operator to find the unique Category names.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     *      select p.Category)
+//     *      .Distinct();
+//     */
+//    public void linq47() {
+//        List<Product> products = getProductList();
+//        List<String> categoryNames = #{
+//        	unique(products.category)
+//        };
+//        //System.out.println("Category names:");
+//        for(String s : categoryNames) {
+//        	//System.out.println(s);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses union operator to create one sequence 
+//     * that contains the unique values from both arrays.
+//     * 
+//     * Orginal LINQ query:
+//     * numbersA.Union(numbersB);
+//     */
+//    public void linq48() {
+//        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+//        int[] numbersB = { 1, 3, 5, 7, 8 };
+//        Collection<Integer> uniqueNumbers = #{
+//        	unique(numbersA union numbersB)
+//        };
+//        //System.out.println("Unique numbers from both arrays:");
+//        for(Integer n : uniqueNumbers) {
+//        	//System.out.println(n);
+//        }
+//        
+//    }
+//    
+//    /**
+//     * This sample uses union operator to create one sequence that 
+//     * contains the unique first letter from both product and customer names.
+//     * 
+//     * Orginal LINQ queries:
+//     * var productFirstChars =
+//     *      from p in products
+//     *      select p.ProductName[0];
+//     *  var customerFirstChars =
+//     *      from c in customers
+//     *      select c.CompanyName[0];
+//     *
+//     *  var uniqueFirstChars = productFirstChars.Union(customerFirstChars);
+//     */
+//    public void linq49() {
+//        List<Product> products = getProductList();
+//        List<Customer> customers = getCustomerList();
+//        Collection<Character> uniqueFirstChars = #{
+//        	unique(
+//        		products.productName.charAt(0) 
+//	        	union
+//	        	customers.companyName.charAt(0)
+//	        )
+//        };
+//        //System.out.println("Unique first letters from Product names and Customer names:");
+//        for(Character ch : uniqueFirstChars) {
+//        	//System.out.println(ch);
+//        }
+//        
+//    }
+//    
+//    /**
+//     * This sample uses intersect operator to create one sequence that 
+//     * contains the common values shared by both arrays.
+//     * 
+//     * Orginal LINQ query:
+//     * numbersA.Intersect(numbersB);
+//     */
+//    public void linq50() {
+//        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+//        int[] numbersB = { 1, 3, 5, 7, 8 };
+//        
+//        Collection<Integer> commonNumbers = #{
+//        	numbersA intersect numbersB
+//        };
+//        //System.out.println("Common numbers shared by both arrays:");
+//        for(Integer n : commonNumbers) {
+//        	//System.out.println(n);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses intersect operator to create one sequence that 
+//     * contains the common first letter from both product and customer names.
+//     * 
+//     * Orginal LINQ query:
+//     * var productFirstChars =
+//     *      from p in products
+//     *      select p.ProductName[0];
+//     *  var customerFirstChars =
+//     *      from c in customers
+//     *      select c.CompanyName[0];
+//     *  var commonFirstChars = productFirstChars.Intersect(customerFirstChars);
+//     */
+//    public void linq51()  {
+//    	List<Product> products = getProductList();
+//    	List<Customer> customers = getCustomerList();
+//    	Collection<Character> commonFirstChars = #{
+//    		unique(
+//	    		products.productName.charAt(0) 
+//	        	intersect
+//	        	customers.companyName.charAt(0)
+//	        )
+//    	};
+//    	//System.out.println("Common first letters from Product names and Customer names:");
+//    	for(Character ch : commonFirstChars) {
+//    		//System.out.println(ch);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses minus operator to create a sequence that 
+//     * contains the values from numbersAthat are not also in numbersB.
+//     * 
+//     * Orginal LINQ query:
+//     * numbersA.Except(numbersB);
+//     */
+//    public void linq52() {
+//        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+//        int[] numbersB = { 1, 3, 5, 7, 8 };
+//        Collection<Integer> aOnlyNumbers = #{
+//        	numbersA minus numbersB
+//        };
+//        //System.out.println("Numbers in first array but not second array:");
+//        for(Integer n : aOnlyNumbers) {
+//        	//System.out.println(n);
+//        
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses minus operator to create one sequence that contains
+//     * the first letters of product names that are not also 
+//     * first letters of customer names.
+//     *  
+//     * Orginal LINQ queries:
+//     * var productFirstChars =
+//     *      from p in products
+//     *      select p.ProductName[0];
+//     * var customerFirstChars =
+//     *      from c in customers
+//     *      select c.CompanyName[0];
+//     *
+//     * var productOnlyFirstChars = productFirstChars.Except(customerFirstChars);
+//     */
+//    public void linq53() {
+//        List<Product> products = getProductList();
+//        List<Customer> customers = getCustomerList();
+//        Collection<Character> productOnlyFirstChars = #{
+//    		unique(products.productName.charAt(0)) 
+//        	minus
+//        	unique(customers.companyName.charAt(0))
+//    	};
+//        //System.out.println("First letters from Product names, but not from Customer names:");
+//        for(Character ch : productOnlyFirstChars) {
+//        	//System.out.println(ch);
+//        }
+//    }
+//    
+//    
+//    // -----------------------------------------------------------    
+//    // ---------------   Conversion Operators  -------------------    
+//    // -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses instanceof operator to return only 
+//     * the elements of the array that are of type double.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.OfType<double>();
+//     */
+//    public void linq57() {
+//    	Object[] numbers = { null, 1.0, "two", 3, "four", 5, "six", 7.0 };
+//    	List<Object> doubles = #{
+//    		numbers as n 
+//    		where n instanceof Double
+//    	};
+//    	//System.out.println("Numbers stored as doubles:");
+//    	//System.out.println(doubles);
+//    }
+//    
+//    // -----------------------------------------------------------    
+//    // ----------------   Element  Operators  --------------------    
+//    // -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses range operator to return the first matching element as a Product, 
+//     * instead of as a sequence containing a Product.
+//     * 
+//     * Orginal LINQ query:
+//     * (
+//     *      from p in products
+//     *      where p.ProductID == 12
+//     *      select p)
+//     *      .First();
+//     */
+//    public void linq58() {
+//    	List<Product> products = getProductList();
+//    	Product product12 = #{
+//    		(products where productID == 12)[0]
+//    	};
+//    	//System.out.println(product12);
+//    }
+//    
+//    /**
+//     * This sample uses range operator to find the first element in the array that starts with 'o'.
+//     * 
+//     * Orginal LINQ query:
+//     * strings.First(s => s[0] == 'o');
+//     */
+//    public void linq59() {
+//        String[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//        String startsWithO = #{
+//        	(strings as s where s.charAt(0) == 'o')[0]
+//        };
+//        //System.out.printf("A string starting with 'o': %s\n", startsWithO);
+//    }
+//    
+//    /**
+//     * This sample uses range operator to retrieve the second number greater than 5 from an array.
+//     * 
+//     * Orginal LINQ query:
+//     * (from n in numbers
+//     *  where n > 5
+//     *  select n)
+//     * .ElementAt(1)
+//     */
+//    public void linq64() {
+//        int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//        int fourthLowNum = #{
+//        	(numbers as n where n > 5)[1]
+//        };
+//        //System.out.printf("Second number > 5: %s\n", fourthLowNum);
+//
+//    }
+//    
+//    // -----------------------------------------------------------    
+//    // --------------------  Quantifiers  ------------------------    
+//    // -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses any operator to determine if any of the words
+//     * in the array contain the substring 'ei'.
+//     * 
+//     * Orginal LINQ query:
+//     * words.Any(w => w.Contains("ei"));
+//     */
+//    public void linq67() {
+//    	String[] words = { "believe", "relief", "receipt", "field" };
+//    	Boolean iAfterE = #{
+//    		any words contains("ei")
+//    	};
+//    	//System.out.println("There is a word that contains in the list that contains 'ei': "+iAfterE);
+//    }
+//    
+//    /**
+//     * This sample uses any operator to return a grouped a list of products only for 
+//     * categories that have at least one product that is out of stock.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//            group p by p.Category into g
+//            where g.Any(p => p.UnitsInStock == 0)
+//            select new { Category = g.Key, Products = g };
+//     */
+//    public void linq69() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> productGroups = #{
+//    		(unique(products.category) as cat).
+//    		(cat as category, (products where category == cat) group as products)
+//    			where any products unitsInStock == 0
+//    	};
+//    	for(Struct catGroup : productGroups) {
+//    		String category = (String) catGroup.get("category");
+//    		//System.out.println("Products in category: "+category+" that have at least 1 product out of stock");
+//    		List<Product> prGroup = (List<Product>) catGroup.get("products");
+//    		for(Product p : prGroup) {
+//    			//System.out.println("   "+p);
+//    		}
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses all operator to determine whether an array contains only odd numbers.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.All(n => n % 2 == 1);
+//     */
+//    public void linq70() {
+//    	int[] numbers = { 1, 11, 3, 19, 41, 65, 19 };
+//    	Boolean onlyOdd = #{
+//    		all (numbers as n) (n % 2 == 1) 
+//    	};
+//    	//System.out.println("The list contains only odd numbers: "+onlyOdd);
+//    }
+//    
+//    /**
+//     * This sample uses all operator to return a grouped a list of products only for 
+//     * categories that have all of their products in stock.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//            group p by p.Category into g
+//            where g.All(p => p.UnitsInStock > 0)
+//            select new { Category = g.Key, Products = g };
+//     */
+//    public void linq72() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> productGroups = #{
+//			(unique(products.category) as cat).
+//			(cat as category, (products where category == cat) group as products)
+//				where all products unitsInStock > 0
+//    	};
+//    	for(Struct catGroup : productGroups) {
+//    		String category = (String) catGroup.get("category");
+//    		//System.out.println("Products in category '"+category+"' that have at all of their product in stock: ");
+//    		List<Product> prGroup = (List<Product>) catGroup.get("products");
+//    		for(Product p : prGroup) {
+//    			//System.out.println("   "+p);
+//    		}
+//    	}
+//    }
+//    
+//    
+//    // -----------------------------------------------------------    
+//    // ---------------  Aggregator Operators  --------------------    
+//    // -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses count operator to get the number of unique factors of 300.
+//     * 
+//     * Orginal LINQ query:
+//     * factorsOf300.Distinct().Count();
+//     */
+//    public void linq73() {
+//    	int[] factorsOf300 = { 2, 2, 3, 5, 5 };
+//    	int uniqueFactors = #{
+//    		count(unique(factorsOf300))
+//    	};
+//    	//System.out.println("There are "+uniqueFactors+" unique factors of 300.");
+//    }
+//    
+//    /**
+//     * This sample uses count operator to get the number of odd ints in the array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Count(n => n % 2 == 1);
+//     */
+//    public void linq74() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	int oddNumbers = #{
+//    		count(numbers as n where n % 2 == 1)
+//    	};
+//    	//System.out.println("There are "+oddNumbers+" odd numbers in the list.");
+//    }
+//    
+//    /**
+//     * This sample uses count operator to return a list 
+//     * of customers and how many orders each has.
+//     * 
+//     * Orginal LINQ query:
+//     * from c in customers
+//     * select new { c.CustomerID, OrderCount = c.Orders.Count() };
+//     */
+//    public void linq76() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<Struct> orderCounts = #{
+//    		(customers as c).
+//    		(c.customerID as customerID, count(c.orders) as orderCount)
+//    	};
+//    	for(Struct o : orderCounts) {
+//    		String customerID = (String) o.get("customerID");
+//    		Integer orderCount = (Integer) o.get("orderCount");
+//    		//System.out.println("There are "+orderCount+" orders for customerID: "+customerID);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses count operator to return a list 
+//     * of categories and how many products each has.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * select new { Category = g.Key, ProductCount = g.Count() };
+//     */
+//    public void linq77() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categoryCounts = #{
+//    		(unique(products.category) as cat).
+//			(cat as category, count(products where category == cat) as productCount)
+//    	};
+//    	for(Struct o : categoryCounts) {
+//    		String category = (String) o.get("category");
+//    		Integer productCount = (Integer) o.get("productCount");
+//    		//System.out.println("There are "+productCount+" products in category: "+category);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses sum operator to get the total of the numbers in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Sum();
+//     */
+//    public void linq78() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	int numSum = #{
+//    		sum(numbers)
+//    	};
+//    	//System.out.println("The sum of the numbers is "+numSum+".");
+//    }
+//    
+//    /**
+//     * This sample uses sum operator to get the total 
+//     * number of characters of all words in the array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.Sum(w => w.Length);
+//     */
+//    public void linq79() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	int totalChars = #{
+//    		sum(words.length())
+//    	};
+//    	//System.out.println("There are a total of "+totalChars+" characters in these words.");
+//    }
+//    
+//    /**
+//     * This sample uses sum operator to get the total units in stock for each product category.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * select new { Category = g.Key, TotalUnitsInStock = g.Sum(p => p.UnitsInStock) };
+//     */
+//    public void linq80() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as category, sum( (products where category == cat).unitsInStock ) as totalUnitsInStock)
+//    	};
+//    	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		Integer totalUnitsInStock = (Integer) o.get("totalUnitsInStock");
+//    		//System.out.println("There are "+totalUnitsInStock+" products in stock in category: "+category);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses min operator to get the lowest number in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Min();
+//     */
+//    public void linq81() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	int minNum = #{
+//    		min(numbers)
+//    	};
+//    	//System.out.println("The minimum number is "+minNum+".");
+//    }
+//    
+//    /**
+//     * This sample uses min operator to get the 
+//     * length of the shortest word in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.Min(w => w.Length);
+//     */
+//    public void linq82() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	int shortestWord = #{
+//    		min(words.length())
+//    	};
+//    	//System.out.println("The shortest word is "+shortestWord+" characters long.");
+//    }
+//    
+//    /**
+//     * This sample uses min operator to get the cheapest 
+//     * price among each category's products.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * select new { Category = g.Key, CheapestPrice = g.Min(p => p.UnitPrice) };
+//     */
+//    public void linq83() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as category, min((products where category == cat).unitPrice) as cheapestPrice)
+//    	};
+//    	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		Double cheapestPrice = (Double) o.get("cheapestPrice");
+//    		//System.out.println("category="+category+"\tcheapestPrice="+cheapestPrice);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses min operator to get the products with the cheapest price in each category.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * let minPrice = g.Min(p => p.UnitPrice)
+//     * select new { Category = g.Key, CheapestProducts = g.Where(p => p.UnitPrice == minPrice) };
+//     */
+//    public void linq84() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as cat, (products where category == cat) group as pr).
+//    		(cat as category, (pr where unitPrice == min(pr.unitPrice)) group as cheapestProducts)
+//    	};
+//       	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		List<Product> cheapestProducts = (List<Product>) o.get("cheapestProducts");
+//    		//System.out.println("category="+category+"\tcheapestProducts="+cheapestProducts);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses max operator to get the highest number in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Max();
+//     */
+//    public void linq85() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	int maxNum = #{
+//    		max(numbers)
+//    	};
+//    	//System.out.println("The maximum number is "+maxNum+".");
+//    }
+//    
+//    /**
+//     * This sample uses max operator to get the 
+//     * length of the longest word in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.Max(w => w.Length);
+//     */
+//    public void linq86() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	int longestLength = #{
+//    		max(words.length())
+//    	};
+//    	//System.out.println("The longest word is "+longestLength+" characters long.");
+//    }
+//    
+//    /**
+//     * This sample uses max operator to get the most expensive 
+//     * price among each category's products.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//       group p by p.Category into g
+//       select new { Category = g.Key, MostExpensivePrice = g.Max(p => p.UnitPrice) };
+//     */
+//    public void linq87() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as category, max((products where category == cat).unitPrice) as mostExpensivePrice)
+//    	};
+//    	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		Double mostExpensivePrice = (Double) o.get("mostExpensivePrice");
+//    		//System.out.println("category="+category+"\tmostExpensivePrice="+mostExpensivePrice);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses max operator to get the products with the most expensive price in each category.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * let maxPrice = g.Max(p => p.UnitPrice)
+//     * select new { Category = g.Key, MostExpensiveProducts = g.Where(p => p.UnitPrice == maxPrice) };
+//     */
+//    public void linq88() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as cat, (products where category == cat) group as pr).
+//    		(cat as category, (pr where unitPrice == max(pr.unitPrice)) group as mostExpensiveProducts)
+//    	};
+//       	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		List<Product> mostExpensiveProducts = (List<Product>) o.get("mostExpensiveProducts");
+//    		//System.out.println("category="+category+"\tmostExpensiveProducts="+mostExpensiveProducts);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample uses avg operator to get the average of all numbers in an array.
+//     * 
+//     * Orginal LINQ query:
+//     * numbers.Average();
+//     */
+//    public void linq89() {
+//    	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//    	double averageNum = #{
+//    		avg(numbers)
+//    	};
+//    	//System.out.println("The average number is "+averageNum);
+//    }
+//    
+//    /**
+//     * This sample uses avg operator to get the average length of the words in the array.
+//     * 
+//     * Orginal LINQ query:
+//     * words.Average(w => w.Length);
+//     */
+//    public void linq90() {
+//    	String[] words = { "cherry", "apple", "blueberry" };
+//    	double averageLength = #{
+//    		avg(words.length())
+//    	};
+//    	//System.out.println("The average word length is "+averageLength+" characters.");
+//    }
+//    
+//    /**
+//     * This sample uses avg operator to get the average price of each category's products.
+//     * 
+//     * Orginal LINQ query:
+//     * from p in products
+//     * group p by p.Category into g
+//     * select new { Category = g.Key, AveragePrice = g.Average(p => p.UnitPrice) };
+//     */
+//    public void linq91() {
+//    	List<Product> products = getProductList();
+//    	List<Struct> categories = #{
+//    		(unique(products.category) as cat).
+//    		(cat as category, avg((products where category == cat).unitPrice) as averagePrice)
+//    	};
+//    	for(Struct o : categories) {
+//    		String category = (String) o.get("category");
+//    		Double averagePrice = (Double) o.get("averagePrice");
+//    		//System.out.println("category="+category+"\taveragePrice="+averagePrice);
+//    	}
+//    }
+//    
+//    // -----------------------------------------------------------    
+//    // -------------  Miscellaneous Operators  -------------------    
+//    // -----------------------------------------------------------
+//    
+//    /**
+//     * This sample uses union operator to create one sequence that 
+//     * contains each array's values, one after the other.
+//     * 
+//     * Orginal LINQ query:
+//     * numbersA.Concat(numbersB);
+//     */
+//    public void linq94() {
+//        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+//        int[] numbersB = { 1, 3, 5, 7, 8 };
+//        List<Integer> allNumbers = #{
+//        	numbersA union numbersB
+//        };
+//        //System.out.println("All numbers from both arrays:");
+//        for(Integer n : allNumbers) {
+//        	//System.out.println(n);
+//        }
+//    }
+//    
+//    /**
+//     * This sample uses union operator to create one sequence that contains the 
+//     * names of all customers and products, including any duplicates.
+//     * 
+//     * Orginal LINQ queries:
+//     *  var customerNames =
+//     *      from c in customers
+//     *      select c.CompanyName;
+//     *  var productNames =
+//     *      from p in products
+//     *      select p.ProductName;
+//     *  var allNames = customerNames.Concat(productNames);
+//     */
+//    public void linq95() {
+//    	List<Customer> customers = getCustomerList();
+//    	List<Product> products = getProductList();
+//    	List<String> allNames = #{
+//    		customers.companyName
+//    		union
+//    		products.productName
+//    	};
+//    	//System.out.println("Customer and product names:");
+//    	for(String n : allNames) {
+//    		//System.out.println(n);
+//    	}
+//    }
+//    
+//    /**
+//     * This sample check if two sequences match on all elements in the same order.
+//     * 
+//     * Orginal LINQ query:
+//     * wordsA.SequenceEqual(wordsB);
+//     */
+//    public void linq96() {
+//        String[] wordsA = new String[] { "cherry", "apple", "blueberry" };
+//        String[] wordsB = new String[] { "cherry", "apple", "blueberry" };
+//        
+//        Boolean match = #{
+//        	all wordsA as a
+//	        a == wordsB[$index]
+//        };
+//        //System.out.println("The sequences match: "+match);
+//    }
+    
+}

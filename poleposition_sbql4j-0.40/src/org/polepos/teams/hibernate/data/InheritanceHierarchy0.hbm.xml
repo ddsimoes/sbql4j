@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.polepos.teams.hibernate.data">
+	<class name="InheritanceHierarchy0" table="tInheritanceHierarchy0">
+		<id column="ID" type="int">
+        	<generator class="native"/>
+		</id>
+		<property name="i0"		column="i0"		type="int"/>
+		<joined-subclass name="InheritanceHierarchy1" table="tInheritanceHierarchy1">
+			<key column="parent0"/>
+			<property name="i1"		column="i1"		type="int"/>
+			<joined-subclass name="InheritanceHierarchy2" table="tInheritanceHierarchy2">
+				<key column="parent1"/>
+				<property name="i2"		column="i2"		type="int"    index="i2_idx"/>
+				<joined-subclass name="InheritanceHierarchy3" table="tInheritanceHierarchy3">
+					<key column="parent2"/>
+					<property name="i3"		column="i3"		type="int"/>
+					<joined-subclass name="InheritanceHierarchy4" table="tInheritanceHierarchy4">
+						<key column="parent3"/>
+						<property name="i4"		column="i4"		type="int"/>
+					</joined-subclass>
+				</joined-subclass>
+			</joined-subclass>
+		</joined-subclass>
+	</class>
+</hibernate-mapping>

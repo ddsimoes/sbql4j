@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>PolePosition benchmark results</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table width="100%">
+	<tr>
+		<td>
+			<h2>PolePosition benchmark results</h2>
+			<a href="http://www.polepos.org">http://www.polepos.org</a>
+		</td>
+		<td valign="top" align="right" height="50">
+			<a href="http://sourceforge.net/projects/polepos/"><img height="31" alt="SourceForge.net Logo" src="http://sourceforge.net/sflogo.php?group_id=134549&amp;type=1"
+					width="88" border="0"> </a>
+		</td>
+	</tr>
+</table>
+<hr/>
+<h3>Flatobject : queryIndexedString</h3>
+<dd>write, query, update and delete indexed flat objects</dd><br><br><br>
+<table border="0" bgcolor="#000000" align="center" width="754" cellpadding="3" cellspacing="2">
+<tr>
+	<th align="right" bgcolor="#c0c0c0">t [time in ms]</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:30000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:100000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:300000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+</tr>
+<tr>
+	<th align="right" bgcolor="#c0c0c0"><strong><a href="http://www.db4o.com" target="_blank"> db4o/8.1.200.15821</a></th>
+	<td align="right" bgcolor="#ffffff">575</td>
+	<td align="right" bgcolor="#ffffff">435</td>
+	<td align="right" bgcolor="#ffffff">726</td>
+</tr>
+<tr>
+	<th align="right" bgcolor="#c0c0c0"><strong><a href="http://www.db4o.com" target="_blank"> db4o_sbql4j/8.1.200.15821</a></th>
+	<td align="right" bgcolor="#ffffff">349</td>
+	<td align="right" bgcolor="#ffffff">412</td>
+	<td align="right" bgcolor="#ffffff">701</td>
+</tr>
+</table>
+<p align="center">
+<img src="flatobject_queryIndexedString_time.jpg" border="2" bordercolor="#000000"/>
+</p>
+
+<table border="0" bgcolor="#000000" align="center" width="754" cellpadding="3" cellspacing="2">
+<tr>
+	<th align="right" bgcolor="#c0c0c0">m [memory in byte]</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:30000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:100000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+	<th align="left" bgcolor="#c0c0c0">
+		commitinterval:10000<br>
+		objects:300000<br>
+		selects:3000<br>
+		updates:30<br>
+	</th>
+</tr>
+<tr>
+	<th align="right" bgcolor="#c0c0c0"><strong><a href="http://www.db4o.com" target="_blank"> db4o/8.1.200.15821</a></th>
+	<td align="right" bgcolor="#ffffff">2105560</td>
+	<td align="right" bgcolor="#ffffff">2173272</td>
+	<td align="right" bgcolor="#ffffff">2886264</td>
+</tr>
+<tr>
+	<th align="right" bgcolor="#c0c0c0"><strong><a href="http://www.db4o.com" target="_blank"> db4o_sbql4j/8.1.200.15821</a></th>
+	<td align="right" bgcolor="#ffffff">2439080</td>
+	<td align="right" bgcolor="#ffffff">2702424</td>
+	<td align="right" bgcolor="#ffffff">3341376</td>
+</tr>
+</table>
+<p align="center">
+<img src="flatobject_queryIndexedString_memory.jpg" border="2" bordercolor="#000000"/>
+</p>
+</body>
+</html>

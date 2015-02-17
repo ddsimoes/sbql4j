@@ -1,0 +1,48 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.util.*;
+
+public class RangeTest {
+	public static void main(String[] args) {
+		new RangeTest();
+	}
+	
+	public RangeTest() {
+//		test1(); //OK
+		test2();
+	}
+	
+	public void test1() {
+		int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+//		1..3
+		List<Integer> range1 = #{
+			numbers[0..1]
+		};
+		System.out.println(range1);
+		
+	}
+	
+	public void test2() {
+		int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+		List<Map<String, Object>> range1 = #{
+			(numbers as n).
+			(n as n, numbers[0..n] group as nums)
+		};
+		System.out.println(range1);
+		
+	}
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

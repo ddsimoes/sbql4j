@@ -1,0 +1,9 @@
+class IndexedObject {
+    String _string;
+    int _int;
+}
+// OO
+db.store(new IndexedObject(string, int));
+
+// SQL
+insert into indexedobject (_string, _int ) values ( ? , ? );

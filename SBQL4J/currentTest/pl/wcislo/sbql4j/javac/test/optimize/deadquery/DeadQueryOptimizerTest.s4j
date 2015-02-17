@@ -1,0 +1,73 @@
+package pl.wcislo.sbql4j.javac.test.optimize.deadquery;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+
+import pl.wcislo.sbql4j.java.model.runtime.*;
+
+public class DeadQueryOptimizerTest {
+
+	
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	new DeadQueryOptimizerTest();
+	}
+
+    public DeadQueryOptimizerTest() {
+//    	test1();
+    }
+    
+//    public void test1() {
+//    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+//		List<Integer> emptyList = new ArrayList<Integer>();
+//		List<Integer> res2 = #{
+//			(nums as n, emptyList).
+//    		(n)
+//    	};
+//    }
+    
+    public void test2() {
+//    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+//		List<Integer> emptyList = new ArrayList<Integer>();
+    	/**
+    	 * TODO moze rzeczywiscie trzeba pomyslec o licznosci wynikow?
+    	 * przynajmniej tam, gdzie w podzapytaniu jest [0..*] ?
+    	 */
+    	List<Customer> cust = getCustomerList();
+		List<String> res2 = #{
+			cust.(
+				customerID as id,
+				avg(orders.total) as avgOrderVal,
+				orders.orderID as orderID
+			).id
+    	};
+    }
+    
+//    public void test3() {
+//    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+//    	List<Customer> cust = getCustomerList();
+//		List<String> res2 = #{
+//			(nums as n).(
+//				n > 3 ? 
+//				("n " as p1, "jest " as p2, "wieksze" as p3) :
+//				("n " as p1, "jest " as p2, "mniejsze" as p3)
+//			).p3
+//    	};
+//    }
+    
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

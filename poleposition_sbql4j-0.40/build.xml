@@ -1,0 +1,117 @@
+<project name="poleposition" default="race" basedir=".">
+
+	<property name="polepositionversion" value="0.40" />
+
+	<property name="jdo" value="jdo" />
+	<property name="jvi" value="jvi" />
+	<property name="jpa" value="jpa" />
+
+	<path id="poleposition_classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+
+	</path>
+	
+	<target name="jdoenhance" description="runs the JDO enhancer" if="jdo">
+		<java classname="org.polepos.enhance.JdoEnhance">
+			<classpath>
+				<pathelement location="bin" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<target name="jpaenhance" description="runs the JPA enhancer" if="jpa">
+		<java classname="org.polepos.enhance.JpaEnhance">
+			<classpath>
+				<pathelement location="bin" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+					
+    <target name="jvienhance" description="runs the JVI enhancer" if="jvi">
+        <java classname="com.versant.Enhance" fork="yes" failonerror="yes">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <pathelement location="bin/"/>
+            </classpath>
+            <arg line="-config src/config.jvi -in bin -out bin"/>
+        </java>
+    </target>
+
+	<!-- <target name="race" depends="clean,compile,jdoenhance,jvienhance,jpaenhance" description="runs with all circuits and all teams "> -->
+	<target name="race" depends="clean,compile,jdoenhance" description="runs with all circuits and all teams ">
+		<java classname="org.polepos.RunSeason" fork="true" >
+			<classpath>
+				<pathelement location="bin" />
+				<fileset dir="lib">
+					<include name="**/**/*.jar" />
+				</fileset>
+			</classpath>
+			<jvmarg value="-Xmx1g"/>
+		</java>
+	</target>
+
+	<target name="compile" description="compiles the Poleposition sources">
+		<mkdir dir="bin" />
+		<copy todir="bin">
+			<fileset dir="src">
+				<include name="**/**" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac destdir="bin" debug="true">
+			<src path="src" />
+			<classpath refid="poleposition_classpath" />
+		</javac>
+	</target>
+
+	<target name="distribute" description="creates a zip to distribute the project">
+
+		<property name="ddir" value="dist/poleposition-${polepositionversion}" />
+		<property name="dfile" value="dist/poleposition-${polepositionversion}.zip" />
+
+		<mkdir dir="${ddir}" />
+
+		<copy overwrite="true" todir="${ddir}">
+			<fileset dir=".">
+				<include name="doc/*" />
+				<exclude name="doc/results/**" />
+				<include name="lib/**" />
+				<include name="licenses/**" />
+				<include name="pseudocode/**" />
+				<include name="settings/**" />
+				<include name="src/**" />
+				<include name="templates/**" />
+				<include name=".classpath" />
+				<include name=".project" />
+				<include name="build.xml" />
+				<include name="COPYING" />
+				<exclude name="**/CVS" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+
+		<delete file="${dfile}" failonerror="false" />
+
+		<zip destfile="${dfile}">
+			<fileset dir="dist">
+				<include name="poleposition-${polepositionversion}/**" />
+			</fileset>
+		</zip>
+
+	</target>
+
+	<target name="clean">
+        <delete dir="bin"/>
+	</target>
+
+</project>

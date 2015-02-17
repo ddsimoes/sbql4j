@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.polepos.teams.hibernate.data">
+	<class name="IndexedObject" table="tIndexedObject">
+		<id column="ID" type="int">
+        	<generator class="native"/>
+		</id>
+		<property name="Int" column="fint" type="int" index="fint_idx"/>
+		<property name="String"	column="fstring" type="string" length="100" index="fstring_idx"/>
+	</class>
+</hibernate-mapping>

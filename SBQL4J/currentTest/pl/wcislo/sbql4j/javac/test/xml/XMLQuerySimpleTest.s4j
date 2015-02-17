@@ -1,0 +1,23 @@
+package pl.wcislo.sbql4j.javac.test.xml;
+
+
+import java.io.File;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import pl.wcislo.sbql4j.lang.xml.XMLDataSource;
+import pl.wcislo.sbql4j.lang.xml.XMLMetadata;
+import pl.wcislo.sbql4j.lang.xml.XMLMetadata.SourceType;
+
+public class XMLQuerySimpleTest {
+	public static void main(String[] args) {
+		
+		@XMLMetadata(type=SourceType.XML_SCHEMA_FILE, value="sbql_test/books.xsd", validateXML=true)
+		XMLDataSource xml = new XMLDataSource(new File("sbql_test/books.xml"));
+		
+		Struct res = #{xml.catalogue};
+		System.out.println(res);
+		Struct res2 = #{xml.catalogue.book where price > 50};
+		System.out.println(res2);
+		
+	}
+}

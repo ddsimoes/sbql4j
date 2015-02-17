@@ -1,0 +1,17 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+
+import java.util.*;
+
+public class WhereIndexedTest {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+//    	string[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+    	String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+//    	List<String> shortDigits = #{ digits as d where d.size() < $index };
+    	List<String> shortDigits = #{ digits as d where d.length() < $index };
+    	System.out.println(shortDigits);
+	}
+}

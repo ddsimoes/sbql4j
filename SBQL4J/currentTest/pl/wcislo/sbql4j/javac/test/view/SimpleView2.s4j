@@ -1,0 +1,42 @@
+package pl.wcislo.sbql4j.javac.test.view;
+
+import java.util.List;
+
+import pl.wcislo.sbql4j.lang.views.View;
+import pl.wcislo.sbql4j.lang.views.ReadableView;
+
+public class SimpleView2 implements View<List<Integer>> {
+	
+	@Override
+	public List<Integer> getVirtualObjects() {
+		return #{bag(1, 2, 3, 4, 5) as n};
+	}
+	
+	public ReadableView<List<Integer>, List<Integer>> getHighNums() {
+		return new ReadableView<List<Integer>, List<Integer>>() {
+			@Override
+			public List<Integer> getSeed() {
+				return #{n};
+			}
+			
+			@Override
+			public List<Integer> onRead() {
+				return #{n where n > 3};
+			}
+			
+		};
+	}
+	
+	public final ReadableView<List<Integer>, List<Integer>> lowNums = 
+		new ReadableView<List<Integer>, List<Integer>>() {
+			@Override
+			public List<Integer> getSeed() {
+				return #{n};
+			}
+			
+			@Override
+			public List<Integer> onRead() {
+				return #{n where n <= 3};
+			}
+		};
+}

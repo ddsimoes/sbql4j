@@ -1,0 +1,67 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.util.*;
+
+public class GroupByTest {
+	public static void main(String[] args) {
+		new GroupByTest();
+	}
+	
+	public GroupByTest() {
+		test1();
+	}
+	
+	public void test1() {
+		List<Customer> customers = getCustomerList();
+		
+		//rok - liczba zamowien
+//		List<Map<String, Object>> yearOrders = #{
+//			(customers.orders group as allOrders).(
+//				(unique(allOrders.orderDate.getYear()) as oYear).
+//				(oYear as year, (allOrders where orderDate.getYear() == oYear) group as orders)
+//			)
+//		};
+//		List<Map<String, Object>> yearOrders = #{
+//			(customers.orders group as allOrders).(
+//				allOrders as orders group by orderDate.getYear() as year
+//			)
+//		}
+		
+//		List<Map<String, Object>> yearMonthOrders = #{
+//		List<Integer> yearMonthOrders = #{
+		Object yearMonthOrders = #{
+			(customers.orders group as allOrders).
+			(unique(allOrders.orderDate.getYear() ) as year join
+				(allOrders where orderDate.getYear() == year) group as yearGroups
+			).(
+				(year as year, (
+				    (unique(yearGroups.orderDate.getMonth()) as month) join                 
+					((yearGroups where orderDate.getMonth() == month)[0]) group as orders
+				) group as yearGroups
+			  ) 
+			).(year as year, count(yearGroups) as monthsCount)
+		};
+		
+		
+//		System.out.println(yearOrders);
+//		System.out.println(yearMonthOrders);
+		System.out.println(ObjectDumper.dump(yearMonthOrders));
+//		System.out.println(yearMonthOrders);
+				
+		
+	}
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

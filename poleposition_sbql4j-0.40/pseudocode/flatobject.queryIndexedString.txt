@@ -1,0 +1,9 @@
+// OO
+db.query(new Predicate<IndexedObject>(){
+	public boolean match(IndexedObject obj) {
+		return obj._string.equals(string);
+	}
+});
+
+// SQL
+select * from flatobject where _string = ?; 

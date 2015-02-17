@@ -1,0 +1,11 @@
+class ListHolder {
+    List _list;
+}
+
+// OO
+ListHolder listHolder = new ListHolder();
+listHolder.populateList(elementCount);
+db.store(listHolder);
+
+// SQL
+// not yet implemented for JDBC driver

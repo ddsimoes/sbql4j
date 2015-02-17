@@ -1,0 +1,345 @@
+package edu.pjwstk.jps;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import edu.pjwstk.jps.model.Address;
+import edu.pjwstk.jps.model.Car;
+import edu.pjwstk.jps.model.Firm;
+import edu.pjwstk.jps.model.Person;
+
+public class ExampleData {
+	private List<Car> cars;
+	private List<Firm> firms;
+	private List<Person> persons;
+	
+	public ExampleData() {
+		initData();
+	}
+	
+	public List<Car> getCars() {
+		return cars;
+	}
+	public List<Firm> getFirms() {
+		return firms;
+	}
+	public List<Person> getPersons() {
+		return persons;
+	}
+	
+	private void initData() {
+		List<String> colors = new ArrayList<String>();
+		colors.add("Red");
+		colors.add("Blue");
+		colors.add("Yellow");
+		colors.add("Green");
+		colors.add("Black");
+		colors.add("White");
+		List<Date> sampleDates = new ArrayList<Date>();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			sampleDates.add(df.parse("1995-03-01"));
+			sampleDates.add(df.parse("1995-09-22"));
+			sampleDates.add(df.parse("1996-01-06"));
+			sampleDates.add(df.parse("1997-07-11"));
+			sampleDates.add(df.parse("1998-04-30"));
+			sampleDates.add(df.parse("1998-06-15"));
+			sampleDates.add(df.parse("1999-09-30"));
+			sampleDates.add(df.parse("2000-12-20"));
+			sampleDates.add(df.parse("2001-01-01"));
+			sampleDates.add(df.parse("2002-06-14"));
+		} catch (ParseException e) {
+			System.err.println(e);
+		}
+		List<String> cities = new ArrayList<String>();
+		cities.add("£ódŸ");
+		cities.add("Warszawa");
+		cities.add("Poznañ");
+		cities.add("Wroc³aw");
+		cities.add("Kraków");
+		cities.add("Gdañsk");
+		cities.add("Szczecin");
+		cities.add("Rzeszów");
+		cities.add("Katowice");
+		List<String> streets = new ArrayList<String>();
+		streets.add("5'th avenue");
+		streets.add("S. La Salle St.");
+		streets.add("South Cass Avenue");
+		streets.add("Park Avenue");
+		streets.add("West Avenue");
+		streets.add("North Avenue");
+
+		List<String> femaleLNames = new ArrayList<String>();
+		femaleLNames.add("NOWAK");
+		femaleLNames.add("KOWALSKA");
+		femaleLNames.add("WIŒNIEWSKA");
+		femaleLNames.add("WÓJCIK");
+		femaleLNames.add("KOWALCZYK");
+		femaleLNames.add("KAMIÑSKA");
+		femaleLNames.add("LEWANDOWSKA");
+		femaleLNames.add("ZIELIÑSKA");
+		femaleLNames.add("SZYMAÑSKA");
+		femaleLNames.add("WO¯NIAK");
+		femaleLNames.add("D¥BROWSKA");
+		femaleLNames.add("KOZ£OWSKA");
+		femaleLNames.add("JANKOWSKA");
+		femaleLNames.add("MAZUR");
+		femaleLNames.add("WOJCIECHOWSKA");
+		femaleLNames.add("KWIATKOWSKA");
+		femaleLNames.add("KRAWCZYK");
+		femaleLNames.add("PIOTROWSKA");
+		femaleLNames.add("KACZMAREK");
+		femaleLNames.add("GRABOWSKA");
+		femaleLNames.add("PAW£OWSKA");
+		femaleLNames.add("MICHALSKA");
+		femaleLNames.add("ZAJ¥C");
+		femaleLNames.add("KRÓL");
+		femaleLNames.add("JAB£OÑSKA");
+		femaleLNames.add("WIECZOREK");
+		femaleLNames.add("NOWAKOWSKA");
+		femaleLNames.add("WRÓBEL");
+		femaleLNames.add("MAJEWSKA");
+		femaleLNames.add("OLSZEWSKA");
+		femaleLNames.add("STÊPIEÑ");
+		femaleLNames.add("JAWORSKA");
+		femaleLNames.add("MALINOWSKA");
+		femaleLNames.add("ADAMCZYK");
+		femaleLNames.add("NOWICKA");
+		femaleLNames.add("GÓRSKA");
+		femaleLNames.add("DUDEK");
+		femaleLNames.add("PAWLAK");
+		femaleLNames.add("WITKOWSKA");
+		femaleLNames.add("WALCZAK");
+		femaleLNames.add("RUTKOWSKA");
+		femaleLNames.add("SIKORA");
+		femaleLNames.add("BARAN");
+		femaleLNames.add("MICHALAK");
+		femaleLNames.add("SZEWCZYK");
+		femaleLNames.add("OSTROWSKA");
+		femaleLNames.add("TOMASZEWSKA");
+		femaleLNames.add("PIETRZAK");
+		femaleLNames.add("JASIÑSKA");
+		femaleLNames.add("WRÓBLEWSKA");
+
+		List<String> femaleFNames = new ArrayList<String>();
+
+		femaleFNames.add("ANNA");
+		femaleFNames.add("MARIA");
+		femaleFNames.add("KATARZYNA");
+		femaleFNames.add("MA£GORZATA");
+		femaleFNames.add("AGNIESZKA");
+		femaleFNames.add("KRYSTYNA");
+		femaleFNames.add("BARBARA");
+		femaleFNames.add("EWA");
+		femaleFNames.add("EL¯BIETA");
+		femaleFNames.add("ZOFIA");
+		femaleFNames.add("JANINA");
+		femaleFNames.add("TERESA");
+		femaleFNames.add("JOANNA");
+		femaleFNames.add("MAGDALENA");
+		femaleFNames.add("MONIKA");
+		femaleFNames.add("JADWIGA");
+		femaleFNames.add("DANUTA");
+		femaleFNames.add("IRENA");
+		femaleFNames.add("HALINA");
+		femaleFNames.add("HELENA");
+		femaleFNames.add("BEATA");
+		femaleFNames.add("ALEKSANDRA");
+		femaleFNames.add("MARTA");
+		femaleFNames.add("DOROTA");
+		femaleFNames.add("MARIANNA");
+		femaleFNames.add("GRA¯YNA");
+		femaleFNames.add("JOLANTA");
+		femaleFNames.add("STANIS£AWA");
+		femaleFNames.add("IWONA");
+		femaleFNames.add("KAROLINA");
+		femaleFNames.add("BO¯ENA");
+		femaleFNames.add("URSZULA");
+		femaleFNames.add("JUSTYNA");
+		femaleFNames.add("RENATA");
+		femaleFNames.add("ALICJA");
+		femaleFNames.add("PAULINA");
+		femaleFNames.add("SYLWIA");
+		femaleFNames.add("NATALIA");
+		femaleFNames.add("WANDA");
+		femaleFNames.add("AGATA");
+		femaleFNames.add("ANETA");
+		femaleFNames.add("IZABELA");
+		femaleFNames.add("EWELINA");
+		femaleFNames.add("MARZENA");
+		femaleFNames.add("WIES£AWA");
+		femaleFNames.add("GENOWEFA");
+		femaleFNames.add("PATRYCJA");
+		femaleFNames.add("KAZIMIERA");
+		femaleFNames.add("EDYTA");
+		femaleFNames.add("STEFANIA");
+
+		List<String> maleLNames = new ArrayList<String>();
+		maleLNames.add("NOWAK");
+		maleLNames.add("KOWALSKI");
+		maleLNames.add("WIŒNIEWSKI");
+		maleLNames.add("WÓJCIK");
+		maleLNames.add("KOWALCZYK");
+		maleLNames.add("KAMIÑSKI");
+		maleLNames.add("LEWANDOWSKI");
+		maleLNames.add("ZIELIÑSKI");
+		maleLNames.add("WO¯NIAK");
+		maleLNames.add("SZYMAÑSKI");
+		maleLNames.add("D¥BROWSKI");
+		maleLNames.add("KOZ£OWSKI");
+		maleLNames.add("JANKOWSKI");
+		maleLNames.add("MAZUR");
+		maleLNames.add("WOJCIECHOWSKI");
+		maleLNames.add("KWIATKOWSKI");
+		maleLNames.add("KRAWCZYK");
+		maleLNames.add("KACZMAREK");
+		maleLNames.add("PIOTROWSKI");
+		maleLNames.add("GRABOWSKI");
+		maleLNames.add("ZAJ¥C");
+		maleLNames.add("PAW£OWSKI");
+		maleLNames.add("KRÓL");
+		maleLNames.add("MICHALSKI");
+		maleLNames.add("WRÓBEL");
+		maleLNames.add("WIECZOREK");
+		maleLNames.add("JAB£OÑSKI");
+		maleLNames.add("NOWAKOWSKI");
+		maleLNames.add("MAJEWSKI");
+		maleLNames.add("STÊPIEÑ");
+		maleLNames.add("OLSZEWSKI");
+		maleLNames.add("JAWORSKI");
+		maleLNames.add("MALINOWSKI");
+		maleLNames.add("DUDEK");
+		maleLNames.add("ADAMCZYK");
+		maleLNames.add("PAWLAK");
+		maleLNames.add("GÓRSKI");
+		maleLNames.add("NOWICKI");
+		maleLNames.add("SIKORA");
+		maleLNames.add("WALCZAK");
+		maleLNames.add("WITKOWSKI");
+		maleLNames.add("BARAN");
+		maleLNames.add("RUTKOWSKI");
+		maleLNames.add("MICHALAK");
+		maleLNames.add("SZEWCZYK");
+		maleLNames.add("OSTROWSKI");
+		maleLNames.add("TOMASZEWSKI");
+		maleLNames.add("PIETRZAK");
+		maleLNames.add("ZALEWSKI");
+		maleLNames.add("WRÓBLEWSKI");
+
+		List<String> maleFNames = new ArrayList<String>();
+		maleFNames.add("JAN");
+		maleFNames.add("ANDRZEJ");
+		maleFNames.add("PIOTR");
+		maleFNames.add("KRZYSZTOF");
+		maleFNames.add("STANIS£AW");
+		maleFNames.add("TOMASZ");
+		maleFNames.add("PAWE£");
+		maleFNames.add("JÓZEF");
+		maleFNames.add("MARCIN");
+		maleFNames.add("MAREK");
+		maleFNames.add("MICHA£");
+		maleFNames.add("GRZEGORZ");
+		maleFNames.add("JERZY");
+		maleFNames.add("TADEUSZ");
+		maleFNames.add("ADAM");
+		maleFNames.add("£UKASZ");
+		maleFNames.add("ZBIGNIEW");
+		maleFNames.add("RYSZARD");
+		maleFNames.add("DARIUSZ");
+		maleFNames.add("HENRYK");
+		maleFNames.add("MARIUSZ");
+		maleFNames.add("KAZIMIERZ");
+		maleFNames.add("WOJCIECH");
+		maleFNames.add("ROBERT");
+		maleFNames.add("MATEUSZ");
+		maleFNames.add("MARIAN");
+		maleFNames.add("RAFA£");
+		maleFNames.add("JACEK");
+		maleFNames.add("JANUSZ");
+		maleFNames.add("MIROS£AW");
+		maleFNames.add("MACIEJ");
+		maleFNames.add("S£AWOMIR");
+		maleFNames.add("JAROS£AW");
+		maleFNames.add("KAMIL");
+		maleFNames.add("WIES£AW");
+		maleFNames.add("ROMAN");
+		maleFNames.add("W£ADYS£AW");
+		maleFNames.add("JAKUB");
+		maleFNames.add("ARTUR");
+		maleFNames.add("ZDZIS£AW");
+		maleFNames.add("EDWARD");
+		maleFNames.add("MIECZYS£AW");
+		maleFNames.add("DAMIAN");
+		maleFNames.add("DAWID");
+		maleFNames.add("PRZEMYS£AW");
+		maleFNames.add("SEBASTIAN");
+		maleFNames.add("CZES£AW");
+		maleFNames.add("LESZEK");
+		maleFNames.add("DANIEL");
+		maleFNames.add("WALDEMAR");
+
+		firms = new ArrayList<Firm>();
+		persons = new ArrayList<Person>();
+		cars = new ArrayList<Car>();
+		for(String c : cities) {
+			for(int i=0; i<2; i++) {
+				firms.add(new Firm("firm"+i, new Address(c, random(streets), randomZip())));
+			}
+			for(int i=0; i<20; i++) {
+				persons.add(
+					new Person(random(maleFNames), random(maleLNames), 
+						randomInt(25, 35), randomBoolean(),
+						new Address(c, random(streets), randomZip())
+					)
+				);
+				persons.add(
+					new Person(random(femaleFNames), random(femaleLNames), 
+						randomInt(25, 35), randomBoolean(),
+						new Address(c, random(streets), randomZip())
+					)
+				);
+			}
+			for(int i=0; i<30; i++) {
+				cars.add(new Car("model"+i, random(colors), randomInt(150, 350), random(sampleDates)));
+			}
+		}
+		for(String c : cities) {
+			Collection<Person> pCity = #{persons where address.city == c};
+			for(Person p : pCity) {
+				List<Firm> fCity = #{firms where address.city == c};
+				p.setWorksIn(random(fCity));
+			}
+		}
+
+		
+		
+	}
+
+	private <T> T random(List<T> col) {
+		int randomIndex = (int)(Math.random()*col.size());
+		return col.get(randomIndex);
+	}
+	
+	private String randomZip() {
+        int r = (int)(Math.random() * 100000);
+        DecimalFormat df = new DecimalFormat("00000");
+        StringBuilder sb = new StringBuilder(df.format(r));
+        sb.insert(2, "-");
+        return sb.toString();
+	}
+	
+	private int randomInt(int min, int max) {
+		return (int)(Math.random() * (max-min+1)) + min;
+	}
+	
+	private boolean randomBoolean() {
+		int r = (int)(Math.random() * 2);
+		return r > 0 ? true : false;
+	}
+}

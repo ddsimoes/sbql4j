@@ -1,0 +1,11 @@
+class StringHolder {
+    String[] _strings;
+}
+
+// OO
+StringHolder stringHolder = new StringHolder();
+stringHolder.populateWithManyStrings();
+db.store(stringHolder);
+
+// SQL
+// not yet implemented for JDBC driver

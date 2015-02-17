@@ -1,0 +1,163 @@
+package edu.pjwstk.jps;
+
+import java.util.List;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import edu.pjwstk.jps.model.*;
+
+public class JPSQueries1 {
+	public static void main(String[] args) {
+		new JPSQueries1();
+	}
+	
+	private ExampleData data = new ExampleData();
+	
+	public JPSQueries1() {
+//		query1();
+//		query2();
+//		query3();
+//		query4();
+//		query5();
+//		query6();
+//		query7();
+		query8();
+		query9();
+		query10();
+		query11();
+		query12();
+		query13();
+		query14();
+		query15();
+	}
+	
+//	/**
+//	 * Policz 1 + 2 * 3 + 4
+//	 */
+//	private void query1() {
+//		Integer res = #{1 + 2 * 3 + 4};
+//		System.out.println(res);
+//	}
+//	
+//	/**
+//	 * Policz ile wynosi reszta z dzielenia 435 przez 3
+//	 */
+//	private void query2() {
+//		Integer res = #{435 % 3};
+//		System.out.println(res);
+//	}
+//	
+//	/**
+//	 * Sprawd� czy 6549 dzieli si� przez 4
+//	 */
+//	private void query3() {
+//		Boolean res = #{6549 % 4 == 0};
+//		System.out.println(res);
+//	}
+//	
+//	/**
+//	 * Wypisz nazwiska wszystkich pracownik�w. Posortuj t� list�.
+//	 */
+//	private void query4() {
+//		List<Person> emp = data.getPersons();
+//		List<String> res = #{emp.lName as n order by n};
+//		for(String s : res) {
+//			System.out.println(s);
+//		}
+//	}
+//	
+//	/**
+//	 * Wypisz wszystkie samochody czerwone o mocy wi�kszej od 200
+//	 */
+//	private void query5() {
+//		List<Car> car = data.getCars();
+//		List<Car> redPowerful = #{car where color == "RED" and power > 200};
+//		for(Car c : redPowerful) {
+//			System.out.println(c);
+//		}
+//	}
+//	
+//	/**
+//	 * Wypisz na ekran przywitanie wszystkich pracownik�w po imieniu np. �Hello John!�;
+//	 */
+//	private void query6() {
+//		List<Person> emp = data.getPersons();
+//		List<String> res = #{emp.("Hello "+fName)};
+////		Integer res = #{min(emp.age)};
+////		Integer res2 = #{max(emp.age)};
+////		Integer res3 = #{avg(emp.age)};
+////		
+////		System.out.println(res+" "+res2+" "+res3);
+//		for(String s : res) {
+//			System.out.println(s);
+//		}
+//	}
+//	
+//	/**
+//	 * Wypisz dla ka�dego pracownika nazwisko i ulic� na kt�rej pracuje.
+//	 */
+//	private void query7() {
+//		List<Person> emp = data.getPersons();
+//		List<Struct> res = #{emp.(lName, worksIn.address.street)};
+//		for(Struct s : res) {
+//			System.out.println(s);
+//		}
+//	}
+	
+	/**
+	 * Sprawd�, czy wszyscy pracownicy s� zam�ni/�onaci (u�yj forall)
+	 */
+	private void query8() {
+		List<Person> emp = data.getPersons();
+		Boolean res = #{ all emp.married };
+		System.out.println(res);
+	}
+	
+	/**
+	 * 
+	 */
+	private void query9() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query10() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query11() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query12() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query13() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query14() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void query15() {
+		
+	}
+}

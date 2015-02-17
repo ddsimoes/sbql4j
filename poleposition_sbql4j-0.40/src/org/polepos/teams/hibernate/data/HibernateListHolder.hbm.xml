@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.polepos.teams.hibernate.data">
+	<class name="HibernateListHolder" table="tHibernateListHolder">
+		<id column="ID" type="int">
+        	<generator class="native"/>
+		</id>
+		<list name="list" cascade="all">
+			<key column="list_id"/>
+			<index column="idx"/>
+			<element type="integer"></element>
+		</list>
+	</class>
+</hibernate-mapping>

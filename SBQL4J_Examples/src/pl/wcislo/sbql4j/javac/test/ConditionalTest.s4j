@@ -1,0 +1,50 @@
+package pl.wcislo.sbql4j.javac.test;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.util.*;
+
+public class ConditionalTest {
+	public static void main(String[] args) {
+		new ConditionalTest();
+	}
+	
+	public ConditionalTest() {
+		test1();
+		test2();
+	}
+	
+	public void test1() {
+		int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+		List<String> range1 = #{
+			(numbers as num).
+			(num % 2 == 1 ? "odd" : "even")
+		};
+		System.out.println(range1);
+		
+	}
+	
+	public void test2() {
+		int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+		List<Struct> range1 = #{
+			(numbers as n).
+			(n as n, (n % 2 == 1 ? "odd" : "even"))
+		};
+		System.out.println(range1);
+		
+	}
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

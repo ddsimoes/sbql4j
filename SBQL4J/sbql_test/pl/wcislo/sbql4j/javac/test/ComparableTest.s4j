@@ -1,0 +1,61 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
+
+public class ComparableTest {
+	public static void main(String[] args) {
+		new ComparableTest();
+	}
+	
+	public ComparableTest() {
+		test1(); //OK
+		test2(); //OK
+	}
+	
+	public void test1() {
+		Double d1 = 3.14;
+		Float f2 = 3.14f;
+		
+		Boolean isMore = #{
+			d1 > f2
+		};
+		System.out.println(isMore);
+		
+	}
+	
+	public void test2() {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			Date d1 = df.parse("1999-06-05 16:23:43");
+			Date d2 = df.parse("1999-05-12 09:18:10");
+//			Integer d2 = 5;
+			
+			Boolean isMore = #{
+				d1 > d2
+			};
+			System.out.println(isMore);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

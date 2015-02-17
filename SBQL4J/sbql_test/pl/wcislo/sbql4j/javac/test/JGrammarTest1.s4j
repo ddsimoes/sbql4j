@@ -1,0 +1,76 @@
+package pl.wcislo.sbql4j.javac.test;
+
+//import pupa.*;
+//import java.io.Reader;
+//import java.io.StringWriter;
+//import java.lang.Math;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+
+public class JGrammarTest1<E> {
+
+    private String field1;
+    private static String field2;
+	
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+//		pupa.Pupa list; //= new java.util.ArrayList();
+		//Class clazz2 = JFrame.class;
+		//Class clazz = Formatter.Flags.class;
+		//Class c = State.class;
+		final java.util.List<Employee> employees = new java.util.ArrayList<Employee>();
+		employees.add(new Employee("Kowalski", 5545.50, new Address("Warszawa", "Pejzażowa 2", "02-703")));
+		employees.add(new Employee("Nowak", 3500d, new Address("Lublin", "pl. Litewski 1", "02-650")));
+		Object p = #{employees where salary > 2000};
+		System.out.println(p);
+//		p = #employees.(getAddress().getCity()) where startsWith("L")#;
+//		System.out.println(p);
+		
+		
+//		Object p = #:employees.getSalary()#;
+//		System.out.println(p);
+//		field1 = "";
+		int salary = 100;
+		//boolean initTest;
+		//if(initTest) {}
+//		#:employees.setSalary(:salary)#;
+		
+//		Object p = # :employees.("A teraz pracownik "+ename+" zarabia "+getSalary()+" i mieszka w "+getAddress().getCity())#;
+//		final SimpleClass sc = null;
+//        class P extends JFrame {
+//        	public void k() {
+//            	//Object o = super;
+//        		//args.length;
+//        		Object p = #employees.(getAddress().getCity())#;
+//        		System.out.println(p);
+//        	}
+//        }.k();
+		
+		
+	}
+//	String p = #:emp.setSalary(:salary)#;
+//	Object p = new pl.edu.pjwstk.jps.sba4j.utils.JavaStatement(new pl.edu.pjwstk.jps.Statement(" :emp.salary ", emp)).execute();
+ 
+//	public static void main(String[] args) {
+//		Reader r = null;
+//		StringWriter sw = new StringWriter();
+//		char[] buffer = new char[0xFFFF];
+//		int read;
+//		do {
+//			read = r.read(buffer);
+//			sw.write(buffer, 0, read);	
+//		} while(read > 0);
+//		String result = sw.toString();
+//		
+//	}
+	
+	
+
+}

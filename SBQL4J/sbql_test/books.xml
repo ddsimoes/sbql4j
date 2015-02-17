@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--   <!DOCTYPE catalogue SYSTEM "books.dtd"> -->
+<catalogue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="books.xsd">
+	<book rok="1994">
+		<title>TCP/IP Illustrated</title>
+		<publisher>AW</publisher>
+		<price>65.95</price>
+		<ISBN>ISBN-0201633469</ISBN>
+	</book>
+
+	<book year="1992">
+		<title>Advanced Programming in the Unix environment</title>
+		<publisher>AW</publisher>
+		<price kind="retail">65.95</price>
+		<price kind="wholesale">50.00</price>
+		<ISBN>ISBN-020163346X</ISBN>
+	</book>
+
+	<book year="2000">
+		<title>Data on the Web</title>
+		<publisher>MK</publisher>
+		<price kind="retail">39.95</price>
+		<ISBN>ISBN-3343163346</ISBN>
+	</book>
+
+	<book year="1999">
+		<title>The Economics of Technology and Content for Digital TV</title>
+		<publisher>KA</publisher>
+		<price kind="retail">129.95</price>
+		<ISBN>ISBN-433348634X</ISBN>
+	</book>
+
+
+	<publisher>
+		<abbreviation>AW</abbreviation>
+		<name>Addison-Wesley</name>
+		<country>USA</country>
+	</publisher>
+
+	<publisher>
+		<abbreviation>KA</abbreviation>
+		<name>Kluwer Academic Publishers</name>
+		<country>Holandia</country>
+	</publisher>
+
+	<publisher>
+		<abbreviation>MK</abbreviation>
+		<name>Morgan Kaufmann Publishers</name>
+		<country>USA</country>
+	</publisher>
+
+
+
+</catalogue>

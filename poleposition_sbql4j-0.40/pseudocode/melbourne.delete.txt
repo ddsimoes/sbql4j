@@ -1,0 +1,6 @@
+// OO
+db.query(FlatObject.class).deleteAll();
+
+// SQL
+String sql = "delete from flatobject";
+connection.createStatement().execute(sql);

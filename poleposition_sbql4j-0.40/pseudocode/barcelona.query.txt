@@ -1,0 +1,12 @@
+// OO
+db.query(new Predicate<IH4>(){
+	public boolean match(IH4 obj) {
+		return obj._string.equals(string);
+	}
+});
+
+// SQL
+select * from ih0, ih1, ih2, ih3, ih4 where 
+  ih4._parent = ih3._id and ih3._parent = ih2._id and 
+  ih2._parent = ih1._id and ih1._parent = ih0._id and
+  ih0._string = ?;

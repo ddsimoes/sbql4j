@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/*.cup|**/*.lex" kind="src" path="sbql_src"/>
+	<classpathentry excluding="**/*.cup|**/*.lex" kind="src" path="sbql_test"/>
+	<classpathentry excluding="**/*.lex|**/*.cup" kind="src" path="currentTest"/>
+	<classpathentry excluding="**/*.lex|**/*.cup" kind="src" path="dist"/>
+	<classpathentry kind="src" path="javac_src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/ant-antlr.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ant.jar" sourcepath="lib_src/ant/apache-ant-1.7.1-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/ant/apache-ant-1.7.1-bin.zip!/apache-ant-1.7.1/docs/manual/api"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/asm-all-3.1.jar" sourcepath="lib_src/asm/src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/java-cup-11a-runtime.jar" sourcepath="lib_src/java_cup/java_cup_src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/java-cup-11a.jar" sourcepath="lib_src/java_cup/java_cup_src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/jdom.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jflex-1.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cglib-2.2.jar" sourcepath="lib/cglib-src-2.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib/cglib-docs-2.2.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar" sourcepath="lib_src/commons-logging/commons-logging-1.1.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/commons-logging/commons-logging-1.1.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-adapters-1.1.1.jar" sourcepath="lib_src/commons-logging/commons-logging-1.1.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/commons-logging/commons-logging-1.1.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-api-1.1.1.jar" sourcepath="lib_src/commons-logging/commons-logging-1.1.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/commons-logging/commons-logging-1.1.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.15.jar" sourcepath="lib_src/log4j/apache-log4j-1.2.15.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/log4j/apache-log4j-1.2.15.zip!/apache-log4j-1.2.15/site/apidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="config"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.1.jar" sourcepath="lib_src/commons-collections/commons-collections-3.2.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/commons-collections/commons-collections-3.2.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/jalopy.jar" sourcepath="lib_src/jalopy/jalopy-1.5rc3-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/JavaCompiler/lib_src/jalopy/jalopy-1.5rc3.zip!/jalopy-1.5rc3/docs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.0.1.jar" sourcepath="lib_src/commons-io/commons-io-2.0.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/SBQL4J/lib_src/commons-io/commons-io-2.0.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/cglib-docs-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cglib-src-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/msv.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/relaxngcc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/relaxngDatatype.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xsdlib.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xsom-20110101-SNAPSHOT.jar" sourcepath="lib_src/xsom/xsom-20110101-SNAPSHOT-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/SBQL4J/lib_src/xsom/xsom-20110101-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/resolver.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/serializer.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xercesImpl.jar" sourcepath="lib_src/xerces/Xerces-J-src.2.11.0.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/xercesSamples.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/db4oj"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

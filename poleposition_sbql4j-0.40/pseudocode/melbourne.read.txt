@@ -1,0 +1,11 @@
+// OO
+for (FlatObject object : db.query(FlatObject.class)) {
+    addToCheckSum(object);
+}
+
+// SQL
+String sql = "select * from flatobject";
+ResultSet rs = connection.createStatement().executeQuery(sql);
+while(rs.next()){
+    addToCheckSum(new FlatObject(rs.getString(2), rs.getInt(3)));
+}

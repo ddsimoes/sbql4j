@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db4oIndexMetadata>
+  <indexEntry>
+    <indexedClass>org.polepos.data.IndexedObject</indexedClass>
+    <field>_int</field>
+  </indexEntry>
+  <indexEntry>
+    <indexedClass>org.polepos.data.IndexedObject</indexedClass>
+    <field>_string</field>
+  </indexEntry>
+</db4oIndexMetadata>
+

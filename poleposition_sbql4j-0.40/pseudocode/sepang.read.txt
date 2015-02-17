@@ -1,0 +1,15 @@
+// OO
+Tree.traverse(treeRoot, new TreeVisitor() { 
+    public void visit(Tree tree) {
+        addToCheckSum(tree);
+    }
+});
+
+// SQL
+private Tree read(int id) {
+    ResultSet rs = executeQuery("select * from tree where id = " + id);
+    Tree tree = new Tree();
+    if(rs.getInt(2) > 0) tree.preceding = read(rs.getInt(2));
+    if(rs.getInt(3) > 0) tree.subsequent = read(rs.getInt(3));
+    return tree;
+}

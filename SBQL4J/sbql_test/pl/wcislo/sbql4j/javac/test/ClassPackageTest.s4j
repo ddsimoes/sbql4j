@@ -1,0 +1,25 @@
+package pl.wcislo.sbql4j.javac.test;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+import java.util.List;
+
+import javax.swing.JFrame;
+
+
+public class ClassPackageTest {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+    	List<Integer> o = #{
+    		(nums as n).
+    		(new java.lang.Integer(n))
+    	};
+		System.out.println(o);
+	}
+
+	
+	
+
+}

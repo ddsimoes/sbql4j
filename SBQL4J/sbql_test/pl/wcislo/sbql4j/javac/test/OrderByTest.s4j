@@ -1,0 +1,34 @@
+package pl.wcislo.sbql4j.javac.test;
+
+//import pupa.*;
+//import java.io.Reader;
+//import java.io.StringWriter;
+//import java.lang.Math;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+
+public class OrderByTest {
+
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	Employee emp1 = null;
+		final java.util.List<Employee> employees = new java.util.ArrayList<Employee>();
+		employees.add(new Employee("Kowalski", 5545.50, new Address("Warszawa", "Pejzażowa 2", "02-703")));
+		employees.add(new Employee("Nowak", 3500d, new Address("Lublin", "pl. Litewski 1", "02-650")));
+		List<Employee> res = #{employees order by ename};
+		for(Employee e : res) {
+			System.out.println(e.getEname());
+		}	
+	}
+
+	
+	
+
+}

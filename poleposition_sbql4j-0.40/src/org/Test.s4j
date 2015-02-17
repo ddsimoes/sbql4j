@@ -1,0 +1,13 @@
+package org;
+
+import com.db4o.ObjectContainer;
+
+public class Test {
+	static ObjectContainer db;
+	
+	public static void main(String[] args) {
+		Integer i = #{1 + 1};
+		Integer i2 = #{db.(Integer[0])};
+	}
+	
+}

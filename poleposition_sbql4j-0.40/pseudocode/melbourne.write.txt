@@ -1,0 +1,10 @@
+class FlatObject {
+    String _string;
+    int _int;
+}
+
+// OO
+db.store(new FlatObject(string, int));
+
+// SQL
+insert into flatobject (_string, _int ) values ( ? , ? );

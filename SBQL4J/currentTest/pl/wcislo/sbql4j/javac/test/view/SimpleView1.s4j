@@ -1,0 +1,21 @@
+package pl.wcislo.sbql4j.javac.test.view;
+
+import java.util.List;
+
+
+import pl.wcislo.sbql4j.lang.views.ReadableView;
+import pl.wcislo.sbql4j.lang.views.NonStandaloneView;
+
+@NonStandaloneView
+public class SimpleView1 implements ReadableView<List<Integer>, List<Integer>> {
+	
+	@Override
+	public List<Integer> getVirtualObjects() {
+		return #{bag(1, 2, 3, 4, 5) as n};
+	}
+	
+	@Override
+	public List<Integer> onRead() {
+		return #{n where n > 2};
+	}
+}

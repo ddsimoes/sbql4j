@@ -1,0 +1,262 @@
+package pl.wcislo.sbql4j.javac.test.advanced;
+
+import java.util.List;
+import pl.wcislo.sbql4j.javac.test.advanced.model.Address;
+import pl.wcislo.sbql4j.javac.test.advanced.model.Department;
+import pl.wcislo.sbql4j.javac.test.advanced.model.Employee;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+
+public class AdvancedQueries {
+	
+	public static void main(String[] args) {
+		new AdvancedQueries();
+	}
+	
+	public AdvancedQueries() {
+//		query1();
+//		query2();
+//		query3();
+//		query4();
+//		query5();
+//		query6();
+//		query7();
+//		query8();
+//		query9();
+//		query10();
+//		query11();
+//		query12();
+	}
+	
+	/**
+	 * Get departments together with the average salaries of their employees
+	 */
+	public void query1() {
+		List<Department> depts = data.getDepts();
+		List<Struct> deptAvgSal = #{
+			depts join avg(employs.salary)
+		};
+		Integer i = #{ 3 + 2 / 6};
+		System.out.println("1. Departments together with the average salaries of their employees: ");
+		for(Struct s : deptAvgSal) {
+			Department dept = (Department)s.getValue(0);
+			Double avgSal = (Double)s.getValue(1);
+			System.out.println("Department "+dept.getName()+" has average salary: "+avgSal);
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Get name, salary and department name for employees earning less than 2222
+	 */
+	public void query2() {
+		List<Employee> emp = data.getEmps();
+		List<Struct> poorEmpData = #{
+			(emp where salary < 2222).(name, salary, worksIn.name)
+		};
+		System.out.println("2. Name, salary and department name for employees earning less than 2222: ");
+		for(Struct poorEmp : poorEmpData) {
+			System.out.println(poorEmp);
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Get names of employees working for the department managed by Bert.
+	 */
+	public void query3() {
+		List<Employee> emp = data.getEmps();
+		List<String> bertSubordinates = #{
+			(emp where worksIn.boss.name == "Bert").name
+		};
+		System.out.println("3. Names of employees working for the department managed by Bert:");
+		for(String ename : bertSubordinates) {
+			System.out.println(ename);
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Get the name of Poe's boss:
+	 */
+	public void query4() {
+		List<Employee> emp = data.getEmps();
+		String poeBossName = #{
+			(emp where name == "Poe")[0].worksIn.boss.name	
+		};
+		System.out.println("4. Name of Poe's boss: "+poeBossName);
+		System.out.println();
+	}
+	
+	/**
+	 * Names and cities of employees working in departments managed by Bert
+	 */
+	public void query5() {
+		List<Department> dept = data.getDepts();
+		List<Struct> res = #{
+			(dept where boss.name == "Bert").
+			employs.
+			(name, (exists(address) ? address.city : "No address") )
+		};
+		System.out.println("5. Names and cities of employees working in departments managed by Bert: ");
+		for(Struct s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Get the minimal, average and maximal number of employees in departments
+	 */
+	public void query6() {
+		List<Department> dept = data.getDepts();
+		Struct res = #{
+			min(dept.count(employs)) as minimum, 
+			avg(dept.count(employs)) as average, 
+			max(dept.count(employs)) as maximum
+		};
+		System.out.println("6. Minimal, average and maximal number of employees in departments: ");
+		System.out.println(res);
+		res = #{
+			(dept.count(employs) group as counts).
+			(min(counts) as minimum, avg(counts) as average, max(counts) as maximum)
+		};
+		System.out.println(res);
+		System.out.println();
+	}
+	
+	/**
+	 * For each department get its name and the sum of salaries of employees being not bosses
+	 */
+	public void query7() {
+		List<Department> dept = data.getDepts();
+		List<Struct> res = #{
+			((dept as d) join ((sum(d.employs.salary) - (d.boss.salary)) as s)).(d.name, s)
+		};
+//		((dept as d) join ((sum(d.employs.salary) - (d.boss.salary)) as s)).(d.name, s)
+		System.out.println("7. For each department get its name and the sum of salaries of employees being not bosses: ");
+		for(Struct s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+//		(((Dept as d) join ((sum(d.employs.Emp.salary) - (d.boss.Emp.salary)) as s)).(d.name, s))
+	}
+	
+	/**
+	 * Is it true that each department employs an employee earning the same as his/her boss?
+	 */
+	public void query8() {
+		List<Department> dept = data.getDepts();
+		Boolean res = #{
+			all (dept as d)
+			any ((d.employs minus d.boss) as e)
+			(e.salary == d.boss.salary)
+		};
+		System.out.println("8. Is it true that each department employs an employee earning the same as his/her boss: "+res);
+		System.out.println();
+//		   forall (Dept as d)
+//
+//		   forsome ((d.employs.Emp subtract d.boss.Emp) as e)
+//
+//		   (e.salary = d.boss.Emp.salary);
+	}
+	
+	/**
+	 * For each employee get the message containing his/her name and
+   	 * the percent of the annual budget of his/her department that is
+	 * consumed by his/her monthly salary
+	 */
+	public void query9() {
+		List<Employee> emp = data.getEmps();
+		List<String> res = #{
+			emp.("Employee " + name + " consumes " + (salary * 12 * 100 / (worksIn.budget)) +
+					"% of the " + worksIn.name + " department budget.")
+		};
+		System.out.println("9. For each employee get the message containing his/her name and");
+		System.out.println("the percent of the annual budget of his/her department that is");
+		System.out.println("consumed by his/her monthly salary: ");
+		for(String s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+//		   Emp.("Employee " + name + " consumes " + (salary * 12 * 100 /(worksIn.Dept.budget)) +
+//				   "% of the " + worksIn.Dept.name + " department budget.");
+	}
+	
+	/**
+	 * Get cities hosting all departments
+	 */
+	public void query10() {
+		List<Department> dept = data.getDepts();
+		List<String> res = #{
+			(unique(dept.location)) as deptcity 
+			 where all(dept)(deptcity in location)
+		};
+		System.out.println("10. Get cities hosting all departments:");
+		for(String s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+//		(unique(deref(Dept.location)) as deptcity) where forall(Dept)(deptcity in location)
+	}
+	
+	/**
+	 * For each interval <n,n+999>, n = 0, 1000, 2000, 3000, ... get the message
+	 * (string) containing the number of employees having the salary within this interval
+     * and the interval itself.
+	 * Output messages should have proper grammatical forms (suffixes -s for nouns (n) and verbs (v)).
+	 */
+	public void query11() {
+		List<Employee> emp = data.getEmps();
+		List<String> res = #{
+			((0 as i close by (i+1000 where i <= max(emp.salary)) as i)
+			join (count(emp where salary >= i and salary < i+1000) as c)
+			join (c==1 ? ("" as n, "s" as v) : ("s" as n, "" as v)) ).
+			(c + " employee" + n + " earn"+ v +" between "+ i +" and " + (i+999)) as message
+		};
+		
+		System.out.println("11. For each interval <n,n+999>, n = 0, 1000, 2000, 3000, ... get the message");
+		System.out.println("(string) containing the number of employees having the salary within this interval");
+		System.out.println("and the interval itself.");
+		System.out.println("Output messages should have proper grammatical forms (suffixes -s for nouns (n) and verbs (v)).");
+		for(String s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * For each location give the set of department names that are located at it and
+	 * the average salary of bosses of these departments, providing that
+	 * the number of clerks that are employed at such a location is lower than 100.
+	 */
+	public void query12() {
+		List<Department> dept = data.getDepts();
+		List<Employee> emp = data.getEmps();
+		List<Struct> res = #{
+			((unique(dept.location)) as deptcity).
+			((((dept where deptcity in location) group as citydepts)
+			where count(citydepts.employs.(emp where job == "clerk")) < 100).
+			(deptcity as cityLocation,
+					(citydepts.name) group as cityDeptNames,
+					avg(citydepts.boss.salary) as cityDeptBossAvgSal))
+		};
+		System.out.println("12. For each location give the set of department names that are located at it and");
+		System.out.println("the average salary of bosses of these departments, providing that");
+		System.out.println("the number of clerks that are employed at such a location is lower than 100: ");
+		for(Struct s : res) {
+			System.out.println(s);
+		}
+		System.out.println();
+		
+//		(unique(deref(Dept.location)) as deptcity).
+//	    ((((Dept where deptcity in location) groupas citydepts)
+//	    where count(citydepts.employs.(Emp where job = "clerk")) < 100).
+//	    (deptcity as cityLocation,
+//	     (citydepts.name) groupas cityDeptNames,
+//	     avg(citydepts.boss.Emp.salary) as cityDeptBossAvgSal));
+	}
+	
+	
+	private AdvQueriesExampleData data = new AdvQueriesExampleData();
+}

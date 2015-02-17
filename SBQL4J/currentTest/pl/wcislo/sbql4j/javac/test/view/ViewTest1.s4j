@@ -1,0 +1,22 @@
+package pl.wcislo.sbql4j.javac.test.view;
+
+import pl.wcislo.sbql4j.java.test.model.Address;
+import pl.wcislo.sbql4j.java.test.model.Employee;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import pl.wcislo.sbql4j.javac.test.view.ViewTest1;
+
+import pl.wcislo.sbql4j.java.model.runtime.*;
+
+public class ViewTest1 {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	AAA a = new AAA();
+//    	Address a = new Address();
+    	SimpleView1 v1 = new SimpleView1();
+		List<Integer> res2 = #{ v1 where n > 10 };
+		System.out.println(res2);
+	}
+}

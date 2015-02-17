@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Java SBQL Compiler" default="SBQLPre">
+	<property file="build.properties"/>
+<!--	<property name="PROJECT_DIR" value="C:\_java\_workspaces20110601115450\NCBiR\SBQL4J"/> -->
+	<property name="SOURCE_DIR" value="currenttest"/>
+	<property name="DEST_DIR" value="dist"/>
+	
+<!--	<property name="SYSTEM_CLASSPATH" value="config;classes;lib/asm-all-3.1.jar;lib/java-cup-11a.jar;lib/commons-logging-1.1.1.jar;lib/commons-logging-adapters-1.1.1.jar;lib/commons-logging-api-1.1.1.jar;lib/log4j-1.2.15.jar;lib/jdom.jar;lib/commons-collections-3.2.1.jar;lib/jalopy.jar;lib/jflex-1.4.3.jar;"/> -->
+	<property name="CLASSPATH" value="classes;config"/>
+	
+	<target name="declare">
+		<taskdef name="sbql_pre" 
+			classname="pl.wcislo.sbql4j.java.preprocessor.ant.SBQL4JAntTask"
+			classpath="${SYSTEM_CLASSPATH};">
+		</taskdef>
+		<taskdef name="cup"
+		  classname="java_cup.anttask.CUPTask"
+		  classpath="${SYSTEM_CLASSPATH}"
+		/>
+		<taskdef classname="JFlex.anttask.JFlexTask" name="jflex" classpath="${SYSTEM_CLASSPATH}"/>
+		<taskdef name="gatherDb4oMetadata" 
+			classname="pl.wcislo.sbql4j.java.preprocessor.ant.GatherDb4oMetadataAntTask"
+			classpath="${SYSTEM_CLASSPATH};">
+		</taskdef>
+
+	</target>
+	
+	<target name="prepare" depends="declare">
+		<delete dir="${DEST_DIR}"/>
+		<mkdir dir="${DEST_DIR}"/>
+	</target>
+	<target name="jflex" depends="declare">
+		<jflex 
+		  file="sbql_src\pl\wcislo\sbql4j\lang\parser\lexer.lex"
+		  destdir="sbql_src"
+		/>
+	</target>	
+	<target name="cup" depends="jflex">
+		<cup 
+		  srcfile="${PROJECT_DIR}\sbql_src\pl\wcislo\sbql4j\lang\parser\parser.cup"
+		  destdir="${PROJECT_DIR}\sbql_src"
+		  parser="ParserCup"
+	      symbols="ParserSym"
+		  interface="true"
+		/>
+	</target>
+	
+	<target name="SBQLPre" depends="declare">
+		<sbql_pre
+			sourcedir="${SOURCE_DIR}"
+			destdir="${DEST_DIR}"
+			classpath="${CLASSPATH}"
+			codeGenType="NO_STACKS"
+			codeGenDb4oType="NO_STACKS"
+			printExpressionTrace="false"
+			printQueryPretty="true"
+			optimiseDeadQueries="false"
+			optimiseIndependentQueries="false"
+			optimiseDb4oIndexes="true"
+			db4oMetabase="db4oIndexes.xml"
+		>
+		</sbql_pre>
+	</target>
+	
+	<target name="db4oMetadata" depends="declare">
+		<gatherDb4oMetadata
+			destfile="db4oIndexes.xml"
+			dbfile="testIndexed.db">
+		</gatherDb4oMetadata>
+	</target>
+</project>
+<!-- Xdebug -agentlib:jdwp=transport=dt_socket,server=y,address=8000 -->

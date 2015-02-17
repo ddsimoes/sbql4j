@@ -1,0 +1,15 @@
+// OO
+Tree.traverse(treeRoot, new TreeVisitor() { 
+    public void visit(Tree tree) {
+        db.delete(tree);
+    }
+});
+
+// SQL
+private void delete(int id) {
+    if(id == 0) return;
+    ResultSet rs = executeQuery("select * from tree where id = " + id);
+    delete(rs.getInt(2));
+    delete(rs.getInt(3));
+    executeUpdate("delete from tree where id = " + id);
+}

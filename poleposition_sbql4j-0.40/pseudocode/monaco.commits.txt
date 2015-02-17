@@ -1,0 +1,10 @@
+class FlatObject {
+}
+
+// OO
+db.store(new FlatObject());
+db.commit();
+
+// SQL
+insert into flatobject (_id) values ( ? );
+commit();

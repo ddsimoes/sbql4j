@@ -1,0 +1,69 @@
+<root>
+	<integerNumber>10</integerNumber>
+	<integerNumber2>20</integerNumber2>
+	<realNumber>234.35</realNumber>
+	<realNumber2>362.76</realNumber2>
+	<booleanValue>true</booleanValue>
+	<booleanValue2>false</booleanValue2>
+	<stringValue>Ala</stringValue>
+	<stringValue2>ma kota</stringValue2>
+
+	<pomidor>Pan pomidor wlazł na tyczkę</pomidor>
+	<pomidor>I przedrzeźnia ogrodniczkę.</pomidor>
+	<pomidor>"Jak pan może,</pomidor>
+ 	<pomidor>Panie pomidorze?!"</pomidor>
+ 	<sampleComplexObj>
+ 		<int>123</int>
+ 		<bool>true</bool>
+ 		<double>732.52</double>
+ 		<string>napis</string>
+ 		<sub>
+ 			<napis>napis2</napis>
+ 		</sub>
+ 	</sampleComplexObj>
+
+	<emp>
+		<number>s0000</number>
+		<fName>Anna</fName>
+		<lName>Kowalska</lName>
+		
+		<address>
+			<street>al. Jerozolimskie</street>
+			<number>50</number>
+			<zip>00-111</zip>
+			<city>Warszawa</city>
+		</address>
+		
+		<married>true</married>
+		
+		<book>
+			<author>Juliusz Słowacki</author>
+			<title>Kordian</title>	
+		</book>
+	</emp>
+
+	<emp>
+		<number>s0001</number>
+		<fName>Maciej</fName>
+		<lName>Nowak</lName>
+		
+		<address>
+			<street>Koszykowa</street>
+			<number>86</number>
+			<zip>00-222</zip>
+			<city>Warszawa</city>
+		</address>
+		<book>
+			<author>Adam Mickiewicz</author>
+			<title>Pan Tadeusz</title>	
+		</book>
+		<book>
+			<author>Aleksander Dumas (syn)</author>
+			<title>Dama kameliowa</title>	
+		</book>
+		<married>true</married>
+	</emp>
+	
+
+		
+</root>

@@ -1,0 +1,7 @@
+// OO
+for (StringHolder stringHolder : db.query(StringHolder.class)) {
+    addToCheckSum(stringHolder.checkSumOverAllStrings());
+}
+
+// SQL
+// not yet implemented for JDBC driver

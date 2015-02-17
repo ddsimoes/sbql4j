@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="catalogue" type="catalogueType" />
+
+	<xs:complexType name="catalogueType">
+		<xs:sequence>
+			<xs:element name="book" minOccurs="0" maxOccurs="unbounded"
+				type="bookType" />
+			<xs:element name="publisher" minOccurs="0" maxOccurs="unbounded"
+				type="publisherType" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="bookType">
+		<xs:sequence>
+			<xs:element name="title" minOccurs="1" maxOccurs="1"
+				type="xs:string" />
+			<xs:element name="publisher" minOccurs="1" maxOccurs="1"
+				type="xs:string" />
+			<xs:element name="price" minOccurs="1" maxOccurs="2">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:decimal">
+							<xs:attribute name="kind">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="retail" />
+										<xs:enumeration value="wholesale" />
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ISBN" minOccurs="1" maxOccurs="1"
+				type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="rok" type="xs:integer" use="optional" />
+		<xs:attribute name="year" type="xs:integer" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="publisherType">
+		<xs:sequence>
+			<xs:element name="abbreviation" minOccurs="1" maxOccurs="1"
+				type="xs:string" />
+			<xs:element name="name" minOccurs="1" maxOccurs="3"
+				type="xs:string" />
+			<xs:element name="country" minOccurs="1" maxOccurs="2"
+				type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+</xs:schema>

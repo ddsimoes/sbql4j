@@ -1,0 +1,49 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.util.*;
+
+public class InstanceofTest {
+	public static void main(String[] args) {
+		new InstanceofTest();
+	}
+	
+	public InstanceofTest() {
+		test1(); //OK
+		test2();
+	}
+	
+	public void test1() {
+		Object[] numbers = { 5.5, 4.0f, 1l, 3.24, 9, 8, 6.0f, 7.0, 2, 0 };
+//		1..3
+		List<Object> range1 = #{
+			(numbers as n)
+			 where n instanceof java.lang.Integer
+		};
+		System.out.println(range1);
+		
+	}
+	
+	public void test2() {
+		int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+		List<Map<String, Object>> range1 = #{
+			(numbers as n).
+			(n as n, n % 2 == 1 ? "odd" : "even")
+		};
+		System.out.println(range1);
+		
+	}
+	
+    private LinqExampleData data = new LinqExampleData();
+
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

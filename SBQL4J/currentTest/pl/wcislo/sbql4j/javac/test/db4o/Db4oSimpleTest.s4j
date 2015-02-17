@@ -1,0 +1,111 @@
+package pl.wcislo.sbql4j.javac.test.db4o;
+
+import pl.wcislo.sbql4j.java.test.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.utils.*;
+
+import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
+
+import java.util.*;
+
+import javax.swing.JFrame;
+
+import com.db4o.*;
+
+
+public class Db4oSimpleTest {
+	private ObjectContainer dbConn;
+	
+	
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	new Db4oSimpleTest();
+	}
+    
+    public Db4oSimpleTest() {
+    	getConnection();
+    	try {
+    		prepareData();
+    		test1();
+    		test2();
+    	} finally {
+    		getConnection().close();
+    	}
+    	
+	}
+    
+    private ObjectContainer getConnection() {
+    	if(dbConn == null) {
+    		dbConn = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "test.db");
+    	}
+    	return dbConn;
+    }
+    
+    private void prepareData() {
+    	ObjectContainer con = getConnection();
+    	LinqExampleData data = new LinqExampleData();
+    	ObjectSet<Customer> cust = con.query(Customer.class);
+    	if(cust.isEmpty()) {
+    		for(Customer c : data.getCustomerList()) {
+    			con.store(c);
+    		}
+    	}
+    	ObjectSet<Product> prd = con.query(Product.class);
+    	if(prd.isEmpty()) {
+    		for(Product p : data.getProductList()) {
+    			con.store(p);
+    		}
+    	}
+    	con.commit();
+    }
+	
+    public void test1() {
+    	System.out.println("1. #{ db.(Product) }");
+    	ObjectContainer db = getConnection();
+		Object res = #{ db.(Product) };
+		System.out.println(res);
+    }
+    
+    public void test2() {
+    	System.out.println("2. #{ db.(Product.productName) }");
+    	ObjectContainer db = getConnection();
+		Object res = #{ db.(Product[0].productName) };
+		System.out.println(res);
+    }
+//    
+//    public void test3() {
+//    	System.out.println("3. #{ db.(Product where productName = \"Chai\") }");
+//    	ObjectContainer db = getConnection();
+//		Object res = #{ db.(Product where productName == "Chai") };
+//		System.out.println(res);
+//    }
+//    
+//    public void test4() {
+//    	System.out.println("4. #{ db.(Product where unitPrice > 10) }");
+//    	ObjectContainer db = getConnection();
+//		Object res = #{ db.(Product where unitPrice > 10) };
+//		System.out.println(res);
+//    }
+//    
+//    public void test5() {
+//    	System.out.println("5. #{ db.(Product where productName = chai) }");
+//    	String chai = "Chai";
+//    	ObjectContainer db = getConnection();
+//		Object res = #{ db.(Product where productName == chai) };
+//		System.out.println(res);
+//    }
+    
+//    public void test6() {
+//    	System.out.println("5. #{ db.(Product where productName = chai) }");
+//    	String[] prNames = new String[] {"Chai", "Tea"};
+//    	ObjectContainer db = getConnection();
+//		Object res = #{ db.(Product where productName in (prNames as c where c == "Chai")) };
+//		System.out.println(res);
+//    }
+    
+}

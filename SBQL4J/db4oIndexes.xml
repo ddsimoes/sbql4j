@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db4oIndexMetadata>
+  <indexEntry>
+    <indexedClass>pl.wcislo.sbql4j.javac.test.linq_comp.model.Customer</indexedClass>
+    <field>city</field>
+  </indexEntry>
+  <indexEntry>
+    <indexedClass>pl.wcislo.sbql4j.javac.test.linq_comp.model.Product</indexedClass>
+    <field>productName</field>
+  </indexEntry>
+</db4oIndexMetadata>
+

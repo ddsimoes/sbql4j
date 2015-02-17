@@ -1,0 +1,40 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+
+import java.util.*;
+
+public class Where2Test {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+//    	List<Product> products = GetProductList();
+//        var soldOutProducts =
+//            from p in products
+//            where p.UnitsInStock == 0
+//            select p;
+
+    	
+    	
+    	
+    	List<Product> products = getProductList();
+    	List<Product> soldOutProducts  = #{products as p where p.unitsInStock == 0};
+    	System.out.println(soldOutProducts);
+	}
+    
+    private static List<Product> getProductList() {
+    	List<Product> res = new ArrayList();
+    	res.add(new Product(2, "Product 1", 23.52));
+    	res.add(new Product(0, "Chef Anton's Gumbo Mix", 0.99));
+    	res.add(new Product(1, "Product 3", 1.99));
+    	res.add(new Product(0, "Alice Mutton", 3.35));
+    	res.add(new Product(3, "Product 5", 1.59));
+    	res.add(new Product(0, "Gorgonzola Telino", 50.23));
+    	return res;
+    }
+    
+
+	
+	
+
+}

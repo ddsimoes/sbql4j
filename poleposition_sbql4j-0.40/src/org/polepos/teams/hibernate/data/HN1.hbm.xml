@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.polepos.teams.hibernate.data">
+	<class name="HN1" table="tHN1">
+		<id column="ID" type="int">
+        	<generator class="native"/>
+		</id>
+		<property name="S0"		column="S0"		type="string"	length="100"/>
+		<property name="S1"		column="S1"		type="string"	length="100"/>
+		<property name="S2"		column="S2"		type="string"	length="100"/>
+		<property name="S3"		column="S3"		type="string"	length="100"/>
+		<property name="S4"		column="S4"		type="string"	length="100"/>
+		<property name="S5"		column="S5"		type="string"	length="100"/>
+		<property name="S6"		column="S6"		type="string"	length="100"/>
+		<property name="S7"		column="S7"		type="string"	length="100"/>
+		<property name="S8"		column="S8"		type="string"	length="100"/>
+		<property name="S9"		column="S9"		type="string"	length="100"/>
+
+		
+	</class>
+</hibernate-mapping>

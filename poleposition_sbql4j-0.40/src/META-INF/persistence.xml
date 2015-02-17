@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+  <!--
+    <persistence-unit name="datanucleus/mysql" transaction-type="RESOURCE_LOCAL">
+        <provider>org.datanucleus.jpa.PersistenceProviderImpl</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="datanucleus.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="datanucleus.ConnectionURL" value="jdbc:mysql://localhost/dbbench"/>
+            <property name="datanucleus.ConnectionUserName" value="dbbench"/>
+            <property name="datanucleus.ConnectionPassword" value="dbbench"/>
+            <property name="datanucleus.autoCreateSchema" value="true"/>
+            <property name="datanucleus.validateTables" value="false"/>
+            <property name="datanucleus.validateConstraints" value="false"/>
+            <property name="datanucleus.autoCreateConstraints" value="true"/>
+            <property name="datanucleus.DetachAllOnCommit" value="false"/>
+        </properties>
+
+    </persistence-unit>
+    
+    <persistence-unit name="datanucleus/postgresql" transaction-type="RESOURCE_LOCAL">
+        <provider>org.datanucleus.jpa.PersistenceProviderImpl</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="datanucleus.ConnectionDriverName" value="org.postgresql.Driver"/>
+            <property name="datanucleus.ConnectionURL" value="jdbc:postgresql://localhost/dbbench"/>
+            <property name="datanucleus.ConnectionUserName" value="dbbench"/>
+            <property name="datanucleus.ConnectionPassword" value="dbbench"/>
+            <property name="datanucleus.autoCreateSchema" value="true"/>
+            <property name="datanucleus.validateTables" value="false"/>
+            <property name="datanucleus.validateConstraints" value="false"/>
+            <property name="datanucleus.autoCreateConstraints" value="true"/>
+            <property name="datanucleus.DetachAllOnCommit" value="false"/>
+        </properties>
+        
+    </persistence-unit>
+    
+   -->  
+   
+    <persistence-unit name="openjpa/mysql">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+
+			<!-- Set up openjpa with Apache DBCP connection pooling -->
+
+ 			<property name="openjpa.ConnectionProperties" 
+                value="DriverClassName=com.mysql.jdbc.Driver,
+                  Url=jdbc:mysql://localhost/dbbench, 
+                  MaxActive=100, 
+                  MaxWait=10000, 
+                  TestOnBorrow=true, 
+                  Username=dbbench, 
+                  Password=dbbench"/>
+			<property name="openjpa.ConnectionDriverName" 
+                value="org.apache.commons.dbcp.BasicDataSource"/>
+
+            <property name="openjpa.Multithreaded" value="true"/>
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+            
+        </properties>
+    </persistence-unit>
+    
+    <!--
+    <persistence-unit name="openjpa/postgresql">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="openjpa.ConnectionDriverName" value="org.postgresql.Driver"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:postgresql://localhost/dbbench"/>
+            <property name="openjpa.ConnectionUserName" value="dbbench"/>
+            <property name="openjpa.ConnectionPassword" value="dbbench"/>
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>
+            <property name="openjpa.Multithreaded" value="true"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=false)"/>
+            
+        </properties>
+    </persistence-unit>
+    
+    <persistence-unit name="hibernate/mysql" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/dbbench" />
+            <property name="hibernate.connection.user" value="dbbench"/>
+            <property name="hibernate.connection.password" value="dbbench"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>   
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/> 
+            <property name="hibernate.query.substitutions" value= "true 1, false 0, yes 'Y', no 'N'"/>
+            <property name="hibernate.connection.pool_size" value= "20"/>
+            <property name="hibernate.proxool.pool_alias" value= "pool1"/>
+            <property name="hibernate.jdbc.batch_size" value= "20"/>
+            <property name="hibernate.jdbc.fetch_size" value= "500"/>
+            <property name="hibernate.use_outer_join" value= "true"/>
+            <property name="hibernate.jdbc.batch_versioned_data" value= "true"/>
+            <property name="hibernate.jdbc.use_streams_for_binary" value= "true"/>
+            <property name="hibernate.max_fetch_depth" value= "1"/>
+            <property name="hibernate.cache.region_prefix" value= "hibernate.test"/>
+            <property name="hibernate.cache.use_query_cache" value= "true"/>
+            <property name="hibernate.cache.provider_class" value= "org.hibernate.cache.EhCacheProvider"/>
+            <property name="hibernate.proxool.pool_alias" value= "pool1"/>
+   
+        </properties>
+        
+    </persistence-unit>
+ 
+    <persistence-unit name="eclipselink/mysql">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost/dbbench" />
+            <property name="eclipselink.jdbc.user" value="dbbench" />
+            <property name="eclipselink.jdbc.password" value="dbbench" />
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+            <property name="eclipselink.ddl-generation.output-mode" value="database" />
+        </properties>
+        
+    </persistence-unit>
+  
+
+    <persistence-unit name="eclipselink/postgresql">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <class>org.polepos.teams.jpa.data.JpaIndexedPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaPilot</class>
+        <class>org.polepos.teams.jpa.data.JpaTree</class>
+        <class>org.polepos.teams.jpa.data.JPB0</class>
+        <class>org.polepos.teams.jpa.data.JPB1</class>
+        <class>org.polepos.teams.jpa.data.JPB2</class>
+        <class>org.polepos.teams.jpa.data.JPB3</class>
+        <class>org.polepos.teams.jpa.data.JPB4</class>
+        <class>org.polepos.teams.jpa.data.JpaLightObject</class>
+        <class>org.polepos.teams.jpa.data.JpaListHolder</class>
+        <class>org.polepos.teams.jpa.data.JPN1</class>
+        
+        <properties>
+            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost/dbbench" />
+            <property name="eclipselink.jdbc.user" value="dbbench" />
+            <property name="eclipselink.jdbc.password" value="dbbench" />
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+            <property name="eclipselink.ddl-generation.output-mode" value="database" />
+        </properties>
+        
+    </persistence-unit>
+    
+     -->
+</persistence>

@@ -1,0 +1,10 @@
+class Tree {
+    Tree preceding;
+    Tree subsequent;
+}
+// OO
+db.store(Tree.createTree(depth));
+
+// SQL
+Tree tree = Tree.createTree(depth)
+tree.traverse( insert into tree (id, preceding, subsequent) values ( ? , ? , ? ) );

@@ -1,0 +1,28 @@
+package pl.wcislo.sbql4j.javac.test.linq_comp;
+
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+
+public class SelectMany1Test {
+
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+        int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+        int[] numbersB = { 1, 3, 5, 7, 8 };
+
+//        var pairs =
+//            from a in numbersA
+//            from b in numbersB
+//            where a < b
+//            select new { a, b };
+
+    	Object pairs = #{(numbersA as a join numbersB as b where a < b).(new Pair(a, b)) };
+//    	Object pairs = #{((numbersA as a) join (numbersB as b) where a < b).(new Pair(a, b)) };
+//    	Object pairs = #{ (numbersA as a).(new Pair(a, a)) };
+//    	Object pairs = #{ new Pair(1, 2) };
+    	System.out.println(pairs);
+	}
+
+	
+	
+
+}

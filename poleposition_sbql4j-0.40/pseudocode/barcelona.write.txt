@@ -1,0 +1,13 @@
+class IH4 extends IH3 extends IH2 extends IH1 extends IH0 {
+  String _string;
+}
+
+// OO
+db.store(new IH4(string));
+
+// SQL
+insert into ih0 (id, _string) values ( ? , ? );
+insert into ih1 (id, _parent) values ( ? , ? );
+insert into ih2 (id, _parent) values ( ? , ? );
+insert into ih3 (id, _parent) values ( ? , ? );
+insert into ih4 (id, _parent) values ( ? , ? );

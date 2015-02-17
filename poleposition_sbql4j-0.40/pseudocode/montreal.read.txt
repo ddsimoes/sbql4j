@@ -1,0 +1,7 @@
+// OO
+for (ListHolder listHolder : db.query(ListHolder.class)) {
+    addToCheckSum(listHolder.listElementCount());
+}
+
+// SQL
+// not yet implemented for JDBC driver

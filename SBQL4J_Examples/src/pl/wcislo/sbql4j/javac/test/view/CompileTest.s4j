@@ -1,0 +1,29 @@
+package pl.wcislo.sbql4j.javac.test.view;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import pl.wcislo.sbql4j.javac.test.view.Customer;
+import pl.wcislo.sbql4j.javac.test.view.Product;
+
+public class CompileTest {
+	
+	public static void main(String[] args) {
+		new CompileTest();
+	}
+	
+	public CompileTest() {
+		query1();
+	}
+	
+	/**
+	 * Get departments together with the average salaries of their employees
+	 */
+	public void query1() {
+		List<Product> pr = new ArrayList<Product>();
+		pr.add(new Product(1, "cos", "kategoria", 30.4, 5));
+		List<String> s = #{ pr.category };
+		System.out.println(s);
+	}
+}

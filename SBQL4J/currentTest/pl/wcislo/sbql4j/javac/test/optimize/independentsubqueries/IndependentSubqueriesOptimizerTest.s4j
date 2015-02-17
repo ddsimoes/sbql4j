@@ -1,0 +1,80 @@
+package pl.wcislo.sbql4j.javac.test.optimize.deadquery;
+
+import java.util.List;
+
+import pl.wcislo.sbql4j.javac.test.advanced.AdvQueriesExampleData;
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import pl.wcislo.sbql4j.javac.test.advanced.model.Employee;
+import pl.wcislo.sbql4j.javac.test.advanced.model.Department;
+import pl.wcislo.sbql4j.javac.test.linq_comp.LinqExampleData;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.Customer;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.Product;
+
+public class IndependentSubqueriesOptimizerTest {
+
+	
+    @SuppressWarnings("all")
+	public static void main(String[] args) {
+    	new IndependentSubqueriesOptimizerTest();
+	}
+
+    public IndependentSubqueriesOptimizerTest() {
+    	test1();
+    }
+    
+    public void test1() {
+    	List<Employee> emp = empData.getEmps();
+		List<Employee> res1 = #{
+			emp where salary == ((emp where name == "Smith")[0].salary)
+    	};
+    }
+    
+    public void test2() {
+    	List<Employee> emp = empData.getEmps();
+    	List<Department> dept = empData.getDepts();
+		List<Struct> res1 = #{
+			dept join count(employs where salary > (boss.salary))
+    	};
+    }
+//    public void test2() {
+////    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+////		List<Integer> emptyList = new ArrayList<Integer>();
+//    	/**
+//    	 * TODO moze rzeczywiscie trzeba pomyslec o licznosci wynikow?
+//    	 * przynajmniej tam, gdzie w podzapytaniu jest [0..*] ?
+//    	 */
+//    	List<Customer> cust = getCustomerList();
+//		List<String> res2 = #{
+//			cust.(
+//				customerID as id,
+//				avg(orders.total) as avgOrderVal,
+//				orders.orderID as orderID
+//			).id
+//    	};
+//    }
+//    
+//    public void test3() {
+//    	int[] nums = {5, 2, 7, 1, 8, 0, 3};
+//    	List<Customer> cust = getCustomerList();
+//		List<String> res2 = #{
+//			(nums as n).(
+//				n > 3 ? 
+//				("n " as p1, "jest " as p2, "wieksze" as p3) :
+//				("n " as p1, "jest " as p2, "mniejsze" as p3)
+//			).p3
+//    	};
+//    }
+    
+	
+    
+    private LinqExampleData data = new LinqExampleData();
+    private AdvQueriesExampleData empData = new AdvQueriesExampleData();
+    
+    private List<Product> getProductList() {
+    	return data.getProductList();
+    }
+    
+    private List<Customer> getCustomerList() {
+    	return data.getCustomerList();
+    }
+}

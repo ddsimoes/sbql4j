@@ -1,0 +1,22 @@
+package pl.wcislo.sbql4j.javac.test.view;
+
+import java.util.List;
+import pl.wcislo.sbql4j.javac.test.linq_comp.*;
+import pl.wcislo.sbql4j.javac.test.linq_comp.model.*;
+
+public class DerefMarkerTest {
+	public static void main(String[] args) {
+		new DerefMarkerTest();
+	}
+	
+	private LinqExampleData data = new LinqExampleData();
+	
+	public DerefMarkerTest() {
+		test1();
+	}
+	
+	private void test1() {
+		List<Customer> cust = data.getCustomerList();
+		#{(cust where city == "Warsaw").orders.(orderID, total)};
+	}
+}

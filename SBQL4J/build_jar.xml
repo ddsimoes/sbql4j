@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project JavaCompiler">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+	<property name="WORKSPACE_DIR" value="C:\\_java\\_workspaces20110601115450\\NCBiR\\"/>
+	<property name="PROJECT_DIR" value="${WORKSPACE_DIR}/SBQL4J"/>
+		
+    <target name="create_run_jar">
+        <jar destfile="${WORKSPACE_DIR}/sbql4j_0.95_xml.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="pl.wcislo.sbql4j.javac.test.RunCurrentTest"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${PROJECT_DIR}/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/ant-antlr.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/ant.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/asm-all-3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/java-cup-11a-runtime.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/java-cup-11a.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/jdom.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/jflex-1.4.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/cglib-2.2.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/commons-io-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/commons-logging-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/commons-logging-adapters-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/commons-logging-api-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/log4j-1.2.15.jar"/>
+            <fileset dir="${PROJECT_DIR}/config"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/commons-collections-3.2.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/jalopy.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/msv.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/relaxngDatatype.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/relaxngDatatype.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/resolver.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/serializer.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/xercesImpl.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/xercesSamples.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/xml-apis.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/xsdlib.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="${PROJECT_DIR}/lib/xsom-20110101-SNAPSHOT.jar"/>
+        	
+        </jar>
+    </target>
+</project>

@@ -1,0 +1,9 @@
+// OO
+db.delete(ih4);
+
+// SQL
+delete from ih0 where id = ?;
+delete from ih1 where id = ?;
+delete from ih2 where id = ?;
+delete from ih3 where id = ?;
+delete from ih4 where id = ?;

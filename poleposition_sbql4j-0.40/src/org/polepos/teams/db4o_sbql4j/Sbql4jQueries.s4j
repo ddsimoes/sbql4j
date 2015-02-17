@@ -1,0 +1,31 @@
+package org.polepos.teams.db4o_sbql4j;
+
+import java.util.*;
+
+import org.polepos.circuits.flatobject.*;
+import org.polepos.data.*;
+
+import com.db4o.*;
+import com.db4o.config.*;
+import com.db4o.query.*;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+
+public class Sbql4jQueries {
+	
+	public static Collection<IndexedObject> flatObjectIndexedString(ObjectContainer db, String stringId) {
+		return #{ db.(IndexedObject where _string == stringId) };
+	}
+	
+	public static Collection<IndexedObject> flatObjectIndexedInt(ObjectContainer db, Integer intId) {
+		return #{ db.(IndexedObject where _int == intId) };
+	}
+	
+	public static Collection<InheritanceHierarchy4> inheritanceHierarchyQuery(ObjectContainer db, int i2Constrain) {
+		return #{ db.(InheritanceHierarchy4 where i2 == i2Constrain) };
+	}
+	
+	public static Collection<ComplexHolder2> complexQuery(ObjectContainer db, int i2Constrain) {
+		return #{ db.(ComplexHolder2 where _i2 == i2Constrain) };
+	}
+}

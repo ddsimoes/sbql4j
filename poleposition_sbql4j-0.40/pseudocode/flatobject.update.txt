@@ -1,0 +1,6 @@
+// OO
+indexedObject._str = "updated";
+db.store(indexedObject);
+
+// SQL
+update flatobject set _string = 'updated' where _id = ?;

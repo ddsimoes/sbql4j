@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="dist"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/sbql4j_0.93_alldepend.jar" sourcepath="/SBQL4J/sbql_src"/>
+	<classpathentry kind="lib" path="lib/db4o_sbql4j-8.1.200.15821-core-java5.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="config"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jdo PUBLIC '-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.2//EN' 'http://java.sun.com/dtd/jdo_2_2.dtd'>
+<jdo>
+    <package name="org.polepos.teams.jdo.data">
+    	<class name="JdoIndexedObject">
+          <field name = "_int" indexed = "true"/>
+          <field name = "_string"  indexed = "true"/>
+        </class>
+        <class name="ListHolder">
+        	<field name="_id" indexed = "true"/>
+        	<field name="_name" indexed = "true"/>
+        	<field name="_list">
+        		<collection element-type="ListHolder"/>
+        	</field>
+        </class>
+        <class name="ComplexRoot" />
+        <class name="ComplexHolder0">
+        	<inheritance strategy="new-table"/>
+        	<field name="name" />
+        	<field name="array" />
+            <field name="children">
+        		<collection element-type="ComplexHolder0"/>
+        	</field>
+        </class>
+        <class name="ComplexHolder1">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i1" />
+        </class>
+        <class name="ComplexHolder2">
+        	<inheritance strategy="new-table"/>
+	        <field name = "i2" indexed = "true"/>
+        </class> 
+        <class name="ComplexHolder3">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i3" />
+        </class>
+        <class name="ComplexHolder4">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i4" />
+        </class>
+        <class name="InheritanceHierarchy0">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i0" />
+        </class>
+        <class name="InheritanceHierarchy1">
+			<inheritance strategy="new-table"/>
+			<field name = "i1" />
+        </class>
+        <class name="InheritanceHierarchy2">
+        	<inheritance strategy="new-table"/>
+	        <field name="i2" indexed="true"/>
+        </class> 
+        <class name="InheritanceHierarchy3">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i3" />
+        </class>
+        <class name="InheritanceHierarchy4">
+        	<inheritance strategy="new-table"/>
+        	<field name = "i4" />
+        </class>
+        
+    
+        <class name="JB0" />
+        <class name="JB1" persistence-capable-superclass="org.polepos.teams.jdo.data.JB0" />
+        <class name="JB2" persistence-capable-superclass="org.polepos.teams.jdo.data.JB1">
+	        <field name = "b2" indexed = "true"/>
+        </class> 
+        <class name="JB3" persistence-capable-superclass="org.polepos.teams.jdo.data.JB2" />
+        <class name="JB4" persistence-capable-superclass="org.polepos.teams.jdo.data.JB3" />
+    <class name="JdoTree">
+        <fetch-group name="subsequent">
+    		<field name="subsequent" recursion-depth="16"/>
+		</fetch-group>
+		<fetch-group name="preceding">
+    		<field name="preceding" recursion-depth="16"/>
+		</fetch-group>
+	</class>
+        <class name="JdoPilot" />
+        
+        <class name="JdoIndexedPilot">
+          <field name = "mName" indexed = "true"/>
+          <field name = "mLicenseID"  indexed = "true"/>
+        </class>
+        <class name="JdoLightObject"/>
+        <class name="JdoListHolder">
+        	<field name = "list">
+        		<collection element-type="java.lang.Integer"/>
+        	</field>
+        </class>
+        <class name="JN1"/>
+    </package>    
+</jdo>    
+

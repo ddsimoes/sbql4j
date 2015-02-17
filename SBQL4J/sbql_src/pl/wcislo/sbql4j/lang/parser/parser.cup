@@ -1,0 +1,407 @@
+package pl.wcislo.sbql4j.lang.parser;
+ 
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import java_cup.runtime.Symbol;
+import pl.wcislo.sbql4j.exception.ParserException;
+import pl.wcislo.sbql4j.lang.parser.expression.AsExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.BinarySimpleOperatorExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.CloseByExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.ComaExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.ConditionalExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.ConstructorExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.DerefExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.DotExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.Expression;
+import pl.wcislo.sbql4j.lang.parser.expression.ForEachExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.ForallExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.ForanyExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.GroupAsExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.NameExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.JavaParamExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.JoinExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.LiteralExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.MethodExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.OrderByExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.OrderByParamExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.RangeExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.UnaryExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.UnarySimpleOperatorExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.WhereExpression;
+import pl.wcislo.sbql4j.lang.parser.expression.OrderByParamExpression.SortType;
+import pl.wcislo.sbql4j.lang.parser.terminals.operators.OperatorFactory;
+import pl.wcislo.sbql4j.lang.parser.terminals.Name;
+
+
+parser code {: 
+	public Lexer lexer;
+	private String expr;
+	public Expression RESULT;
+	public List<JavaParamExpression> javaParams = new ArrayList<JavaParamExpression>();
+		
+	
+	public ParserCup(String expr) {
+		this.symbolFactory = new SBQLSymbolFactory();   
+		this.expr = expr;
+	}
+	
+	
+	
+	void setResult(Expression exp) {
+		this.RESULT = exp;
+	} 
+	
+//	void addJavaParamExpr(JavaParamExpression expr) { 
+//		javaParams.add(expr);
+//	}
+	
+	public void report_fatal_error(String message, Object info) throws ParserException {
+		Token token = (Token) info;
+	
+		throw new ParserException(message, token.left + 1, token.right + 1, token.pos + 1, token.value.toString());
+	}
+	
+	public int getCurrentPos() {
+//		java_cup.runtime.Symbol s = (java_cup.runtime.Symbol)stack.peek();
+//		return s.right;
+		Object s = stack.peek();
+		if(s instanceof pl.wcislo.sbql4j.lang.parser.Token) {
+			pl.wcislo.sbql4j.lang.parser.Token t = (pl.wcislo.sbql4j.lang.parser.Token)s;
+			return t.pos;
+		} else {
+			return -1;
+		}
+	}
+	
+	public int getPosition(int tokenStackDistance) {
+		int index = stack.size() - tokenStackDistance - 1;
+		Object s = stack.get(index);
+		if(s instanceof pl.wcislo.sbql4j.lang.parser.Token) {
+			pl.wcislo.sbql4j.lang.parser.Token t = (pl.wcislo.sbql4j.lang.parser.Token)s;
+			return t.pos;
+		} else {
+			return -1;
+		}
+	}
+	
+	public void report_error(String message, Object info) {
+		report_fatal_error(message, info);
+	}
+
+	public void unrecovered_syntax_error(Symbol symbol) {
+		Token token = (Token)symbol;
+		String tokenString = token.toString();
+		if(token.value != null)
+			tokenString += " (" + token.value + ")";
+		report_fatal_error("Unexpected token " + tokenString, token);
+	}
+
+	public void syntax_error(Symbol symbol) {
+		Token token = (Token)symbol;
+		String tokenString = token.toString();
+		if(token.value != null)
+			tokenString += " (" + token.value + ")";
+		report_fatal_error("Unexpected token " + tokenString, token);
+	}
+	 
+
+:};
+
+init with {: 	    lexer = new Lexer(new StringReader(expr)); :};
+scan with {:		return lexer.next_token(); :};
+
+
+terminal Integer INTEGER_LITERAL;
+terminal Double DOUBLE_LITERAL;
+terminal Boolean BOOLEAN_LITERAL;
+terminal String IDENTIFIER;
+terminal String GROUPBY_ASC;
+terminal String GROUPBY_DESC;
+
+//terminal String METHOD;
+terminal String STRING_LITERAL;
+terminal Character CHAR_LITERAL;
+
+terminal String PLUS;
+terminal String MINUS;
+terminal String MULTIPLY; 
+terminal String DIVIDE;
+terminal String MODULO;
+terminal String MORE;
+terminal String EQUALS;
+terminal String NOT_EQUALS;
+terminal String UNIQUE;
+terminal String UNION;
+terminal String SUM;
+terminal String AVG;
+terminal String COUNT;
+terminal String OR;
+terminal String AND;
+terminal String LESS;
+terminal String MORE_OR_EQUAL;
+terminal String LESS_OR_EQUAL;
+terminal String MIN;
+terminal String MAX;
+terminal String COMA;  
+terminal String IN; 
+terminal String DOT;
+terminal String WHERE;
+terminal String DEREF;
+terminal String BAG;
+terminal String SEQUENCE;
+terminal String STRUCT;
+//terminal SyntaxTreeNode JAVA_PARAM;
+terminal String ORDER_BY;
+terminal String CLOSE_BY;
+
+terminal String FORALL;
+terminal String FORANY;
+
+terminal String JOIN;
+terminal String AS;
+terminal String GROUP_AS;
+terminal String NOT;
+terminal String EXISTS;
+terminal String MINUS_FUNCTION;
+terminal String INTERSECT;
+terminal String LEFT_ROUND_BRACKET;
+terminal String RIGHT_ROUND_BRACKET;
+terminal String LEFT_CURLY_BRACKET;
+terminal String RIGHT_CURLY_BRACKET;
+terminal String LEFT_BOX_BRACKET;
+terminal String RIGHT_BOX_BRACKET;
+
+terminal String SEMICOLON;
+
+terminal String FOREACH;
+terminal String NEW;
+terminal String RANGE;
+terminal String QUESTION_MARK;
+terminal String COLON;
+terminal String INSTANCEOF;
+terminal String USING;
+
+
+non terminal Expression goal;
+non terminal Expression expr;
+non terminal Expression expr_without_coma;
+
+non terminal UnarySimpleOperatorExpression bag_expr;
+non terminal UnarySimpleOperatorExpression sequence_expr;
+non terminal Name identifier_literal;
+non terminal MethodExpression method_expr;
+
+non terminal LiteralExpression<?> literal_expression; 
+non terminal OrderByExpression order_by_expr;
+non terminal List<OrderByParamExpression> order_by_param_list;
+non terminal OrderByParamExpression order_by_param;
+non terminal SortType sort_order;
+non terminal List<Expression> exprs;
+non terminal ConstructorExpression constr_expr;
+non terminal DotExpression dot_expr;
+non terminal DotExpression dot_ident_expr;
+//non terminal RangeExpression range_expr;
+non terminal Expression range_expr;
+
+
+precedence left DEREF;
+
+precedence left NEW; 
+precedence left WHERE, JOIN;
+precedence left FORALL, FORANY;
+precedence left NOT;
+//precedence left METHOD;
+precedence left UNION, IN;
+
+precedence left ORDER_BY, CLOSE_BY;
+precedence left QUESTION_MARK, COLON;
+
+precedence left COMA;
+
+
+precedence left IDENTIFIER;
+precedence left OR, AND;
+precedence left EQUALS, NOT_EQUALS, MORE, LESS, MORE_OR_EQUAL, LESS_OR_EQUAL;
+precedence left PLUS, MINUS;
+precedence left MULTIPLY, DIVIDE, MODULO;
+precedence left AS, GROUP_AS;
+precedence left SUM, COUNT, AVG, MIN, MAX, UNIQUE, EXISTS, MINUS_FUNCTION, INTERSECT, INSTANCEOF;
+precedence left LEFT_ROUND_BRACKET, RIGHT_ROUND_BRACKET;
+precedence left LEFT_BOX_BRACKET, RIGHT_BOX_BRACKET;
+
+precedence left DOT;
+precedence left BAG, SEQUENCE, STRUCT;
+precedence left RANGE;
+
+precedence left GROUPBY_ASC, GROUPBY_DESC;
+precedence left SEMICOLON; 
+precedence left USING;
+
+
+
+
+
+
+
+start with goal;
+
+goal ::= expr:e		{: RESULT = e; parser.setResult(e); :} ;
+
+/* 
+expr ::= 
+	 	expr:e1 COMA:o expr:e2	{: RESULT = new BinarySimpleOperatorExpression(e1, e2, OperatorFactory.getOperator(o)); :}
+	|   expr_without_coma:e {: RESULT = e; :}
+	;
+*/
+expr  ::=
+		expr:e1 PLUS:o expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 MINUS:o expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 MULTIPLY:o 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 DIVIDE:o	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	expr:e1 MODULO:o	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 EQUALS:o	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 NOT_EQUALS:o expr:e2    {: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 MORE:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	expr:e1 OR:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	expr:e1 AND:o		 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	expr:e1 UNION:o		 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	dot_expr:e	{: RESULT = e; :}
+	|	expr:e1 JOIN:o		 expr:e2	{: RESULT = new JoinExpression(parser.getPosition(1), e1, e2); :}
+	  
+	|	FORALL:o	expr:e1		 expr:e2	{: RESULT = new ForallExpression(parser.getPosition(2), e1, e2); :}
+	|	FORANY:o	expr:e1		 expr:e2	{: RESULT = new ForanyExpression(parser.getPosition(2), e1, e2); :}
+	
+	| 			SUM:o	 	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	| 			UNIQUE:o	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	| 			COUNT:o	 	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	| 			AVG:o	 	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	|		 	MIN:o 		 expr:e1 	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	| 			MAX:o		 expr:e1 	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	|   bag_expr:e						{: RESULT = e; :}
+//	| 			BAG:o 		 expr:e1 	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+//	| 			BAG:o expr:e2 expr:e1 	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o), e2); :}
+	|	sequence_expr:e					{: RESULT = e; :}
+	| 			STRUCT:o	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}   
+	| 	expr:e1	MINUS_FUNCTION:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}  
+	| 			NOT:o	 	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :} 
+	| 			EXISTS:o	 expr:e1	{: RESULT = new UnarySimpleOperatorExpression(parser.getPosition(1), e1, OperatorFactory.getOperator(o)); :}
+	| 			DEREF:o		 expr:e1 	{: RESULT = new DerefExpression(parser.getPosition(1), e1); :} 
+	| 	expr:e1	AS:o identifier_literal:l {: RESULT = new AsExpression(parser.getPosition(1), e1, l); :} 
+	| 	expr:e1	GROUP_AS:o identifier_literal:l {: RESULT = new GroupAsExpression(parser.getPosition(1), e1, l); :} 
+	| 	expr:e1 WHERE:o	 	 expr:e2	{: RESULT = new WhereExpression(parser.getPosition(1), e1, e2); :}
+	| 	expr:e1 LESS:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 MORE_OR_EQUAL:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 LESS_OR_EQUAL:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 INSTANCEOF:o	 	 expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	|	expr:e1 COMA:o	  	 expr:e2	{: RESULT = new ComaExpression(parser.getPosition(1), e1, e2); :}
+	| 	expr:e1 IN:o expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1, e2, OperatorFactory.getOperator(o)); :}
+	| 	expr:e1 INTERSECT:o expr:e2	{: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(1), e1,e2,  OperatorFactory.getOperator(o)); :}
+	|	literal_expression:l	{: RESULT = l; :}
+	|	identifier_literal:l	{: RESULT = new NameExpression(l.pos, l); :}
+// nie mamy juz parametrow java przekazywanych explicite
+//	|	JAVA_PARAM:p {: RESULT = new JavaParamExpression(p.loc, ((String)p.value).substring(1)); parser.addJavaParamExpr((JavaParamExpression)RESULT); :}
+	|	LEFT_ROUND_BRACKET:o expr:e1 RIGHT_ROUND_BRACKET {: RESULT = e1; :}
+	|   expr:e1 CLOSE_BY:o expr:e2 {: RESULT = new CloseByExpression(parser.getPosition(1), e1, e2); :}
+	|	FOREACH:o expr:e1 LEFT_CURLY_BRACKET exprs:es RIGHT_CURLY_BRACKET {: RESULT = new ForEachExpression(e1.position, e1, es); :}
+	|	constr_expr:e {: RESULT = e; :}
+	|	method_expr:e {: RESULT = e; :}
+	|	expr:e1 LEFT_BOX_BRACKET:o range_expr:e2 RIGHT_BOX_BRACKET {: RESULT = new BinarySimpleOperatorExpression(parser.getPosition(2), e1, e2,  OperatorFactory.getOperator(o)); :}
+	|	expr:condExpr QUESTION_MARK expr:trueExpr COLON expr:falseExpr {: RESULT = new ConditionalExpression(parser.getPosition(3), condExpr, trueExpr,  falseExpr); :}
+	| 	order_by_expr:e {: RESULT = e; :} 
+	;    
+	
+range_expr ::=
+	  expr:e1 					{: RESULT = e1; :}
+	| expr:e1 RANGE expr:e2		{: RESULT = new RangeExpression(parser.getPosition(1), e1, e2); :}
+	| expr:e1 RANGE MULTIPLY	{: RESULT = new RangeExpression(parser.getPosition(1), e1); :}
+	;
+	
+bag_expr ::=  BAG:o LESS IDENTIFIER:i MORE expr:e1 {: RESULT = new UnarySimpleOperatorExpression(parser.getCurrentPos(), e1, OperatorFactory.getOperator(o), new NameExpression(parser.getCurrentPos(), new Name(i, parser.getCurrentPos()))); :}
+	|		  BAG:o expr:e1 {: RESULT = new UnarySimpleOperatorExpression(parser.getCurrentPos(), e1, OperatorFactory.getOperator(o)); :}
+	; 
+sequence_expr ::=  SEQUENCE:o LESS IDENTIFIER:i MORE expr:e1 {: RESULT = new UnarySimpleOperatorExpression(parser.getCurrentPos(), e1, OperatorFactory.getOperator(o), new NameExpression(parser.getCurrentPos(), new Name(i, parser.getCurrentPos()))); :}
+	|		  	   SEQUENCE:o expr:e1 {: RESULT = new UnarySimpleOperatorExpression(parser.getCurrentPos(), e1, OperatorFactory.getOperator(o)); :}
+	;	
+	
+dot_expr ::= expr:e1 DOT:o expr:e2	{: RESULT = new DotExpression(parser.getCurrentPos(), e1, e2); :};
+dot_ident_expr ::= identifier_literal:i1 DOT:o identifier_literal:i2 {: RESULT = new DotExpression(parser.getCurrentPos(), new NameExpression(parser.getCurrentPos(), i1), new NameExpression(parser.getCurrentPos(), i2)); :}
+				|  identifier_literal:i1 DOT:o dot_ident_expr:i2 {: RESULT = new DotExpression(parser.getCurrentPos(), new NameExpression(parser.getCurrentPos(), i1), i2); :}
+			
+;
+  
+	
+exprs ::=  {: RESULT = new ArrayList<Expression>(); :}  
+	| 	exprs:es expr:e1 SEMICOLON {: es.add(e1); RESULT=es; :} 
+	;
+ 
+identifier_literal	::= 
+		IDENTIFIER:l	{: RESULT = new Name(l, parser.getCurrentPos()); :}  
+//	|	IDENTIFIER:l GROUPBY_ASC {: RESULT = new IdentifierOrderBy(l, SortType.ASC ); :}
+//	|	IDENTIFIER:l GROUPBY_DESC {: RESULT = new IdentifierOrderBy(l, SortType.DESC ); :}	
+	 
+	; 
+literal_expression ::=
+		INTEGER_LITERAL:l {: RESULT = new LiteralExpression<Integer>(parser.getCurrentPos(), (Integer)l); :}
+	|	DOUBLE_LITERAL:l  {: RESULT = new LiteralExpression<Double>(parser.getCurrentPos(), (Double)l); :}
+	|	BOOLEAN_LITERAL:l {: RESULT = new LiteralExpression<Boolean>(parser.getCurrentPos(), (Boolean)l); :}
+	|	STRING_LITERAL:l {: RESULT = new LiteralExpression<String>(parser.getCurrentPos(), (String)l); :}
+	|	CHAR_LITERAL:l {: RESULT = new LiteralExpression<Character>(parser.getCurrentPos(), (Character)l); :}
+	;
+
+method_expr	::= identifier_literal:l LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET	{: 
+			String mName = l.val; 
+			int pos = parser.getCurrentPos();
+			RESULT = new MethodExpression(pos, mName, null); 
+		:}
+	| identifier_literal:l LEFT_ROUND_BRACKET expr:e1 RIGHT_ROUND_BRACKET 
+		{: 
+			String mName = l.val.substring(0, l.val.length()).trim(); 
+			int pos = parser.getCurrentPos();
+			RESULT = new MethodExpression(pos, mName, e1);
+			   
+		:} 
+	;
+constr_expr ::= 
+		NEW dot_ident_expr:classNameExpr LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET {:
+			RESULT = new ConstructorExpression(parser.getPosition(3), classNameExpr, null);
+		:} 
+	|	NEW dot_ident_expr:classNameExpr LEFT_ROUND_BRACKET expr:paramsExpr RIGHT_ROUND_BRACKET {:
+			RESULT = new ConstructorExpression(parser.getPosition(4), classNameExpr, paramsExpr);
+		:} 
+	|	NEW IDENTIFIER:className LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET	{:
+			RESULT = new ConstructorExpression(parser.getPosition(3), className, null);
+		:}
+	|	NEW IDENTIFIER:className LEFT_ROUND_BRACKET expr:paramsExpr RIGHT_ROUND_BRACKET	{:
+			RESULT = new ConstructorExpression(parser.getPosition(4), className, paramsExpr);
+		:}
+	;
+	
+order_by_expr ::= 
+	  expr:e1 ORDER_BY:o order_by_param_list:e2 {: RESULT = new OrderByExpression(parser.getCurrentPos(), e1, e2); :}
+//	| expr:e1 ORDER_BY:o order_by_param_comma:e2 {: RESULT = new OrderByExpression(parser.getCurrentPos(), e1, e2); :} 
+	;
+		
+order_by_param_list ::=
+	  order_by_param:p1 {: 
+	  	List<OrderByParamExpression> list = new ArrayList<OrderByParamExpression>();
+	  	list.add(p1); 
+	  	RESULT = list; 
+	  :} 
+	| order_by_param_list:p2 SEMICOLON:o order_by_param:p1 {:
+		p2.add(p1); 
+		RESULT = p2; 
+	  :} 
+	;
+
+order_by_param ::=
+	  expr:e1 sort_order:s	{: RESULT = new OrderByParamExpression(e1.position, e1, s, null); :}
+	| expr:e1 sort_order:s USING expr:comparatorExpr {: RESULT = new OrderByParamExpression(e1.position, e1, s, comparatorExpr); :}
+	;
+	
+sort_order ::= 
+   					{: RESULT = SortType.ASC; :}
+   	| GROUPBY_ASC	{: RESULT = SortType.ASC; :}
+   	| GROUPBY_DESC	{: RESULT = SortType.DESC; :}
+   	;
