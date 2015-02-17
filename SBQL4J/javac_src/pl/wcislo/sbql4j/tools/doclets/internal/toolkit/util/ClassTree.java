@@ -51,6 +51,7 @@ import pl.wcislo.sbql4j.tools.doclets.internal.toolkit.Configuration;
  * @see pl.wcislo.sbql4j.javadoc.ClassDoc
  * @author Atul M Dambalkar
  */
+@SuppressWarnings("unchecked")
 public class ClassTree {
 
     /**

@@ -48,6 +48,7 @@ import pl.wcislo.sbql4j.tools.doclets.internal.toolkit.util.VisibleMemberMap;
  * @author Jamie Ho
  * @since 1.5
  */
+@SuppressWarnings("unchecked")
 public class AnnotationTypeOptionalMemberBuilder extends
     AnnotationTypeRequiredMemberBuilder {
 

@@ -2,28 +2,45 @@
 
 package com.db4o.internal;
 
-import java.util.*;
+import java.util.Comparator;
 
-import pl.wcislo.sbql4j.java.utils.Pair;
-import pl.wcislo.sbql4j.lang.db4o.Db4oSBQLQuery;
-import pl.wcislo.sbql4j.lang.parser.expression.Expression;
+import pl.wcislo.sbql4j.db4o.Db4oSbqlQuery;
 
-import com.db4o.*;
-import com.db4o.config.*;
-import com.db4o.constraints.*;
-import com.db4o.ext.*;
-import com.db4o.foundation.*;
-import com.db4o.internal.activation.*;
-import com.db4o.internal.callbacks.*;
-import com.db4o.internal.events.*;
-import com.db4o.internal.qlin.*;
-import com.db4o.internal.query.*;
-import com.db4o.io.*;
-import com.db4o.qlin.*;
-import com.db4o.query.*;
-import com.db4o.reflect.*;
-import com.db4o.reflect.generic.*;
-import com.db4o.types.*;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.config.Configuration;
+import com.db4o.constraints.UniqueFieldValueConstraintViolationException;
+import com.db4o.ext.DatabaseClosedException;
+import com.db4o.ext.DatabaseReadOnlyException;
+import com.db4o.ext.Db4oDatabase;
+import com.db4o.ext.Db4oIOException;
+import com.db4o.ext.Db4oUUID;
+import com.db4o.ext.ExtObjectContainer;
+import com.db4o.ext.InvalidIDException;
+import com.db4o.ext.ObjectInfo;
+import com.db4o.ext.StoredClass;
+import com.db4o.ext.SystemInfo;
+import com.db4o.foundation.Closure4;
+import com.db4o.foundation.Iterator4;
+import com.db4o.foundation.NotSupportedException;
+import com.db4o.internal.activation.ActivationDepthProvider;
+import com.db4o.internal.activation.ActivationMode;
+import com.db4o.internal.activation.NullModifiedObjectQuery;
+import com.db4o.internal.activation.UpdateDepth;
+import com.db4o.internal.activation.UpdateDepthProvider;
+import com.db4o.internal.callbacks.Callbacks;
+import com.db4o.internal.events.EventRegistryImpl;
+import com.db4o.internal.qlin.QLinRoot;
+import com.db4o.internal.query.NativeQueryHandler;
+import com.db4o.io.Storage;
+import com.db4o.qlin.QLin;
+import com.db4o.query.JdkComparatorWrapper;
+import com.db4o.query.Predicate;
+import com.db4o.query.Query;
+import com.db4o.query.QueryComparator;
+import com.db4o.reflect.ReflectClass;
+import com.db4o.reflect.generic.GenericReflector;
+import com.db4o.types.TransientClass;
 
 /**
  * @exclude
@@ -353,7 +370,7 @@ public class ObjectContainerSession implements InternalObjectContainer, Transien
     /**
      * @author Emil
      */
-    public <R> R query(Db4oSBQLQuery<R> query) throws Db4oIOException,
+    public <R> R query(Db4oSbqlQuery<R> query) throws Db4oIOException,
     		DatabaseClosedException {
     	synchronized(lock()){
             checkClosed();

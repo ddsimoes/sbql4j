@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import pl.wcislo.sbql4j.db4o.Db4oSBQLQuery;
+import pl.wcislo.sbql4j.db4o.Db4oSbqlQuery;
 import pl.wcislo.sbql4j.db4o.result.Db4oObject;
 import pl.wcislo.sbql4j.db4o.result.Db4oResultFactory;
 import pl.wcislo.sbql4j.java.model.runtime.factory.JavaObjectAbstractFactory;
@@ -26,7 +26,7 @@ import com.db4o.internal.LocalTransaction;
 import com.db4o.internal.ObjectContainerBase;
 import com.db4o.internal.Transaction;
 
-public abstract class Db4oSBQLNoStacksQuery<R> implements Db4oSBQLQuery<R> {
+public abstract class Db4oSBQLNoStacksQuery<R> implements Db4oSbqlQuery<R> {
 	private final Expression queryRootNode;
 	private final List<Pair<Object>> javaVars; 
 	private final List<String> topLevelClassNames;

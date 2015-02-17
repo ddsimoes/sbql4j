@@ -64,6 +64,7 @@ import pl.wcislo.sbql4j.xml.model.DBObject;
 import pl.wcislo.sbql4j.xml.model.XmlId;
 import pl.wcislo.sbql4j.xml.parser.store.XMLObjectStore;
 
+@SuppressWarnings("unchecked")
 public class Interpreter implements TreeVisitor {
 	private static final Log log = LogFactory.getLog(Interpreter.class);
 	

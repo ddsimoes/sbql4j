@@ -56,6 +56,7 @@ import pl.wcislo.sbql4j.tools.doclets.internal.toolkit.Configuration;
  * @author Atul M Dambalkar
  * @author Jamie Ho (rewrite)
  */
+@SuppressWarnings("unchecked")
 public class VisibleMemberMap {
 
     private boolean noVisibleMembers = true;

@@ -2,15 +2,18 @@
 
 package  com.db4o;
 
-import java.util.*;
+import java.util.Comparator;
 
-import pl.wcislo.sbql4j.java.utils.Pair;
-import pl.wcislo.sbql4j.lang.db4o.Db4oSBQLQuery;
-import pl.wcislo.sbql4j.lang.parser.expression.Expression;
+import pl.wcislo.sbql4j.db4o.Db4oSbqlQuery;
 
-import com.db4o.ext.*;
-import com.db4o.qlin.*;
-import com.db4o.query.*;
+import com.db4o.ext.DatabaseClosedException;
+import com.db4o.ext.DatabaseReadOnlyException;
+import com.db4o.ext.Db4oIOException;
+import com.db4o.ext.ExtObjectContainer;
+import com.db4o.ext.ObjectCallbacks;
+import com.db4o.query.Predicate;
+import com.db4o.query.Query;
+import com.db4o.query.QueryComparator;
 
 
 /**
@@ -297,7 +300,7 @@ public interface ObjectContainer {
     public <TargetType> ObjectSet <TargetType> query(Predicate<TargetType> predicate, Comparator<TargetType> comparator) throws Db4oIOException, DatabaseClosedException;
     
     
-    public <R> R query(Db4oSBQLQuery<R> query) throws Db4oIOException, DatabaseClosedException;
+    public <R> R query(Db4oSbqlQuery<R> query) throws Db4oIOException, DatabaseClosedException;
 
     /**
      * rolls back the running transaction.

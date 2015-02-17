@@ -61,6 +61,7 @@ import pl.wcislo.sbql4j.javadoc.WildcardType;
  * @since 1.2
  * @author Robert G. Field
  */
+@SuppressWarnings("unchecked")
 public class ClassUseMapper {
 
     private final ClassTree classtree;

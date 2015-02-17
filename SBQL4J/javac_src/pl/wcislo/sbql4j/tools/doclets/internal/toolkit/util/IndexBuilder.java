@@ -57,6 +57,7 @@ import pl.wcislo.sbql4j.tools.doclets.internal.toolkit.Configuration;
  * @see java.lang.Character
  * @author Atul M Dambalkar
  */
+@SuppressWarnings("unchecked")
 public class IndexBuilder {
 
     /**

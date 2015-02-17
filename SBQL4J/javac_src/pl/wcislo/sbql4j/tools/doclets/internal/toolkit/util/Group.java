@@ -61,6 +61,7 @@ import pl.wcislo.sbql4j.tools.doclets.internal.toolkit.Configuration;
  *
  * @author Atul M Dambalkar
  */
+@SuppressWarnings("unchecked")
 public class Group {
 
     /**
