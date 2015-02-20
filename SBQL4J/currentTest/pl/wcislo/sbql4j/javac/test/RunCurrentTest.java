@@ -41,12 +41,13 @@ public class RunCurrentTest {
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\view\\DerefMarkerTest.s4j")
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\Db4oSimpleTest.s4j"),
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\Db4oLinqTest.s4j"),
-	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\Db4oOperatorTest.s4j"),
+//	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\Db4oOperatorTest.s4j"),
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\advanced\\AdvancedQueriesTest.s4j")
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\db4o\\Db4oIndexQueries.s4j"),	
 //	    	new File(baseDir + "currentTest\\edu\\pjwstk\\jps\\ExampleData.s4j")
 //	    	new File(baseDir + "currentTest\\edu\\pjwstk\\jps\\JPSQueries1.s4j")
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\xml\\XMLQuerySimpleTest.s4j"),
+	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\closeby\\CloseByTest.s4j"),
 	    };
 	    String classpath = baseDir + "classes;"+ baseDir + "config;"+baseDirDb4o+"bin;";
 	    CodeGenType cgt = CodeGenType.NO_STACKS;

@@ -52,7 +52,7 @@ public class CloseByBOMTest {
 			log.info(pl.wcislo.sbql4j.util.Utils.resultToString((QueryResult) res, false));
 	}
 	
-	private Czesc prepareData() {
+	public static Czesc prepareData() {
 		Czesc silnik = new Czesc("silnik", 300.40, 1000.40);
 		List<Skladnik> s1 = new ArrayList<Skladnik>();
 		{

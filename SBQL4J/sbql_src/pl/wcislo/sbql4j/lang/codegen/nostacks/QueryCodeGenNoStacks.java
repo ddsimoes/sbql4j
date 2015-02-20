@@ -123,7 +123,7 @@ public class QueryCodeGenNoStacks extends QueryCodeGenerator<Object, Object> {
 		expr.ex1.accept(this, object);
 		String identResult = expr.getSignature().getResultName();
 		String resultType = expr.getSignature().getJavaTypeString();
-		String leftType = expr.ex1.getSignature().getJavaTypeString();
+		String leftType = expr.ex1.getSignature().getJavaTypeStringSingleResult();
 		String identI = generateIdentifier("i");
 		
 		String identLoopVar = expr.getNestedVarName();
@@ -322,6 +322,8 @@ public class QueryCodeGenNoStacks extends QueryCodeGenerator<Object, Object> {
 		if(s1.getColType() != SCollectionType.NO_COLLECTION) {
 			sb.append(sRes.genJavaDeclarationCode()+" = new "+sRes.getJavaTypeStringAssigment()+"(); \n");
 			sb.append("int "+identI+"=0; \n");
+			//sprawdzenie, czy lewa wartość jest nullem - start
+			sb.append("if("+identLeftRes+" != null) {\n");
 			sb.append("for("+leftResType+" "+dotExpression.getNestedVarName()+" : "+identLeftRes+") { \n");
 			sb.append("if("+dotExpression.getNestedVarName()+" == null) { continue; }");
 			dotExpression.ex2.accept(this, object);
@@ -332,6 +334,8 @@ public class QueryCodeGenNoStacks extends QueryCodeGenerator<Object, Object> {
 				sb.append(""+identResult+".addAll("+identRightRes+"); \n");
 			}
 			sb.append(""+identI+"++; \n");
+			sb.append("} \n");
+			//sprawdzenie, czy lewa wartość jest nullem - end
 			sb.append("} \n");
 		} else {
 			//trzeba obsluzyc sytuacje, gdy po lewej stronie jest nazwa klasy (wywolanie statyczne)

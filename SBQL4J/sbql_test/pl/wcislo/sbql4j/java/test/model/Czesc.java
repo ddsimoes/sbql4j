@@ -12,14 +12,14 @@ public class Czesc {
 	
 	public static class Skladnik {
 		private int ilosc;
-		private Czesc czesc;
+		private Czesc prowadziDo;
 		
 		public Skladnik() {}
 		
 		public Skladnik(int ilosc, Czesc czesc) {
 			super();
 			this.ilosc = ilosc;
-			this.czesc = czesc;
+			this.prowadziDo = czesc;
 		}
 		public int getIlosc() {
 			return ilosc;
@@ -28,10 +28,10 @@ public class Czesc {
 			this.ilosc = ilosc;
 		}
 		public Czesc getProwadziDo() {
-			return czesc;
+			return prowadziDo;
 		}
 		public void setProwadziDo(Czesc prowadziDo) {
-			this.czesc = prowadziDo;
+			this.prowadziDo = prowadziDo;
 		}
 	}
 
