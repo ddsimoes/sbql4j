@@ -1,0 +1,28 @@
+package pl.wcislo.sbql4j.javac.test.struct;
+
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+import java.util.*;
+import pl.wcislo.sbql4j.javac.test.struct.model.*;
+
+public class StructTest {
+	public static void main(String[] args) {
+		new StructTest();
+	}
+	
+	public StructTest() {
+		List<Pracownik> emp = prepareData();
+//		Struct res = #{ (1 as o1, 2 as o2).(o1 as o1, o2 as o2) order by o1 };
+		Object res = #{ (emp as e join e.firma as f).(e.imie as i, f.nazwa) order by i};
+//		Struct res = #{ (emp as e join firma as f) };
+		System.out.println(res);
+	}
+	
+	public List<Pracownik> prepareData() {
+		List<Pracownik> res = new ArrayList<Pracownik>();
+		Firma f1 = new Firma("f1");
+		Firma f2 = new Firma("f2");
+		res.add(new Pracownik("a", "b", 1000, f1));
+		res.add(new Pracownik("c", "d", 2000, f2));
+		return res;
+	}
+}

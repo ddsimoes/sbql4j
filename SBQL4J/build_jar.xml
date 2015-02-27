@@ -2,11 +2,12 @@
 <project default="create_run_jar" name="Create Runnable Jar for Project JavaCompiler">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
-	<property name="WORKSPACE_DIR" value="C:\\_java\\_workspaces20110601115450\\NCBiR\\"/>
+<!--	<property name="WORKSPACE_DIR" value="C:\\_java\\_workspaces20110601115450\\NCBiR\\"/> -->
+	<property name="WORKSPACE_DIR" value="./.."/>
 	<property name="PROJECT_DIR" value="${WORKSPACE_DIR}/SBQL4J"/>
 		
     <target name="create_run_jar">
-        <jar destfile="${WORKSPACE_DIR}/sbql4j_0.95_xml.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="${WORKSPACE_DIR}/sbql4j_0.96.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="pl.wcislo.sbql4j.javac.test.RunCurrentTest"/>
                 <attribute name="Class-Path" value="."/>

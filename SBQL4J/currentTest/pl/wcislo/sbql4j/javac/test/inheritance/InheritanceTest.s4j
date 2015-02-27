@@ -1,0 +1,26 @@
+package pl.wcislo.sbql4j.javac.test.inheritance;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import pl.wcislo.sbql4j.javac.test.inheritance.model.Pracownik;
+
+public class InheritanceTest {
+	public static void main(String[] args) {
+		new InheritanceTest();
+	}
+	
+	public InheritanceTest() {
+		List<Pracownik> emp = prepareData();
+		List<String> imiona = #{emp.imie};
+		System.out.println(imiona);
+	}
+	
+	public List<Pracownik> prepareData() {
+		List<Pracownik> res = new ArrayList<Pracownik>();
+		res.add(new Pracownik("a", "b", 1000));
+		res.add(new Pracownik("c", "d", 2000));
+		return res;
+	}
+	
+}

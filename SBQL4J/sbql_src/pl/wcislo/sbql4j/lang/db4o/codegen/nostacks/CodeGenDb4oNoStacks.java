@@ -85,7 +85,7 @@ public class CodeGenDb4oNoStacks extends CodeGeneratorDb4o {
 			sb.append(im.toString()).append("\n");
 		}
 		sb.append("\n");
-		sb.append("public class ").append(className).append(" implements Db4oSBQLQuery { \n"); // 
+		sb.append("public class ").append(className).append(" implements Db4oSbqlQuery { \n"); // 
 //		.append(" extends BaseSimpleQueryExecutor {")
 		//Declare query params as class fields
 		for(Pair<String> field : varsToInclude) {

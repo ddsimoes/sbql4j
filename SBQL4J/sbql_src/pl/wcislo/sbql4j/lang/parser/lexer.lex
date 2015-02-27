@@ -38,7 +38,7 @@ import static pl.wcislo.sbql4j.lang.parser.ParserSym.*;
 
 INTEGER = [0-9]+
 BOOLEAN = true|false
-IDENTIFIER = [_a-zA-Z][0-9a-zA-Z]*
+IDENTIFIER = [_a-zA-Z][_0-9a-zA-Z]*
 SPEC_IDENTIFIER = \$index
 
 //JAVA_PARAM = :[_a-zA-Z][0-9a-zA-Z]*
@@ -50,7 +50,7 @@ LineTerminator = \r|\n|\r\n
 WHITESPACE = {LineTerminator} | [ \t\f]
 
 
-//METHOD = [_a-zA-Z][0-9a-zA-Z]*{WHITESPACE}*[\(]
+//METHOD = [_a-zA-Z][_0-9a-zA-Z]*{WHITESPACE}*[\(]
 
 %state IDENTIFIER
   

@@ -1,0 +1,584 @@
+package pl.wcislo.sbql4j.javac.test.football.query;
+import java.lang.String;
+import com.db4o.ObjectContainer;
+import java.util.*;
+import pl.wcislo.sbql4j.javac.test.football.model.*;
+import pl.wcislo.sbql4j.javac.test.football.data.*;
+//import JFlex.GeneratorException;
+import java.text.ParseException;
+import java.lang.Integer;
+import pl.wcislo.sbql4j.java.model.runtime.Struct;
+public class KORQueries  {
+	private ExampleData data;
+	private ObjectContainer dbConn;
+//	private GUIGlowne m;
+	public static void main(String[] args)  {
+		KORQueries q = new KORQueries();
+	}
+	
+	public KORQueries() {
+		data = new ExampleData();
+		dbConn = data.getConnection();
+		//Optymalizacja2("");
+//		m = new  GUIGlowne(this);
+	
+	}
+	
+	/**
+	 * QUERY 1 : Wyszukaj pilkarzy po imieniu, nazwisku lub po imieniu lub po nazwisku i posortuj po nazwie druzyny 
+	 */
+	
+	public Collection QueryImiePilkarza(String u,String ut) {
+	
+	Collection<Pilkarz> allCars = null;
+	
+	if (u !="" || ut !=""){
+	
+	if (ut !="" && u!="" ){
+	
+		allCars = #{dbConn.((Pilkarz as d  where d.imie == u and d.nazwisko==ut ) order by d.druzyna.nazwa)};
+		
+		}
+		if(ut !="" && u== ""){
+		allCars = #{dbConn.((Pilkarz as d where d.nazwisko==ut ) order by d.druzyna.nazwa)};
+		
+		} 
+		if (u !=""  && ut==""){
+	
+		allCars = #{dbConn.((Pilkarz as d where d.imie == u ) order by d.druzyna.nazwa)};
+		
+		}
+		}
+		else {
+		allCars = #{dbConn.((Pilkarz as d) order by d.druzyna.nazwa)};
+		
+		}
+		return allCars;
+	}
+	/**
+	 * QUERY 2 : Wyszukaj druzyne  po nazwie druzyny 
+	 */
+	
+	public Collection QueryDruzyna(String u) {
+		Collection<Druzyna> allCars = #{dbConn.(Druzyna where nazwa == u)};
+		return allCars;
+	}
+	
+	/**
+	 * QUERY 3 : Zlicz mecze dwoch druzyn jako gospodarze i porownaj ich ilosc i zwroc czy ilosc zgadza sie
+	 */
+	
+	public boolean QueryDruzynaGospodarzeCount(String druzyna1,String druzyna2) {
+		
+		
+		boolean b = #{dbConn.(((count(Mecz where druzyna.nazwa == druzyna1) as d1 )
+		join (count(Mecz where druzyna.nazwa == druzyna2) as d2 )).(d1==d2)
+		)
+		};
+	return b;
+	}
+	
+	/**
+	 *  QUERY 4 : Wyszukaj kontuzji u pilkarza w danym wieku i wyswietl je
+	 */
+	
+	public Collection  QueryKontuzja(int wiek2) {
+		Collection<Kontuzja> allCars = #{dbConn.((Pilkarz  where wiek==wiek2).(kontuzja)) };
+		//as p).(p.kontuzja)
+		return allCars;
+	}
+	
+	/**
+	 *  QUERY 5 : Wylicz srednia,maksymalna i minimalna premie    pilkarzy , i lekarzy z druzyny.
+	 */
+	
+	public Collection<Struct>  QuerySrednia(String wiek) {
+			Collection<Struct> deptAvgSal = #{
+			dbConn.(
+				Druzyna where nazwa==wiek  
+				join min(lista_zawodnikow.premia) as minimumpilkarz, 
+				avg(lista_zawodnikow.premia) as averagepilkarz, 
+				max(lista_zawodnikow.premia) as maximumpilkarz,
+				 min(listalekarzy.premia) as minimumlekarz, 
+				avg(listalekarzy.premia) as averagelekarz, 
+				max(listalekarzy.premia) as maximumlekarz
+			)
+		};
+		return deptAvgSal;
+	}
+	
+	/**
+	 *  QUERY 6 : Wylicz maksymalna pensje wraz z premia wsrod pilkarzy dostepnych w bazie.
+	 */
+	public double  QueryPensja() {
+		
+			double pi = #{dbConn.((max(Pilkarz.pensja) as pensja
+			join (max(Pilkarz.premia) as premia)).(pensja+premia))}; 
+			
+		return pi;
+	}
+	
+	/**
+	 * QUERY 7 : Wylicz srednia ilosc kartek zoltych i czerwonych w meczach .
+	 */
+	 
+	public Struct  QueryKartkiNew() {
+	
+	Struct deptAvgSal = #{dbConn.((count(Mecz) as m
+			join (sum(PilkarzMecz.liczba_zoltych_kartek) as ls )
+			join (sum(PilkarzMecz.liczba_czerwonych_kartek) as lss )).((ls/m) as liczbazoltychkartek,(lss/m) as liczbaczerwonychkartek)
+			)
+		};
+	return deptAvgSal;
+	}
+	
+	
+	/**
+	 *  QUERY 8 : Wylicz liczbę meczów a następnie wylicz procentowy udział stadionow do rozgrywanych wszystkich meczow.
+	 */
+	
+	
+	public float  QueryMeczStadion() {
+			
+			
+			 int mecze = #{dbConn.(count(Mecz))}; 
+			 int stadiony = #{dbConn.(count(unique(Mecz.nazwa_stadionu)))}; 
+			 float percentage = (stadiony * 100/ mecze);
+		return percentage;
+	}
+	
+	/**
+	 * QUERY 9 : Wylicz liczbe bramek druzyny jako gosci i jako gospodarzy a nastepnie wylicz procent zdobytych bramek do wszystkich zdobytych bramek w wszystkich meczach.
+	 */
+	public float QueryBramkiDruzyny(String druzyna1) {
+	
+			
+		Collection<String> m = #{dbConn.((Mecz where druzyna.nazwa == druzyna1).(wynik))};
+		ArrayList<String> meczejakogosp=(ArrayList<String>) m;
+		Collection<String> me = #{dbConn.((Mecz   where druzyna2.nazwa == druzyna1).(wynik))};
+		ArrayList<String> meczejakogosc=(ArrayList<String>) me;
+			int golejakogosp = 0;
+			int golejakogosc = 0;
+			String wynikmeczu;
+			int wynikzmeczu ;
+			for (String p : meczejakogosp){
+			wynikmeczu = p;
+			int pos = wynikmeczu.indexOf(":");
+			wynikzmeczu = Integer.parseInt(wynikmeczu.substring(0, pos));
+			golejakogosp=golejakogosp+wynikzmeczu;
+		}
+		
+		for (String p : meczejakogosc){
+			wynikmeczu = p;
+			int pos = wynikmeczu.indexOf(":");
+			wynikzmeczu = Integer.parseInt(wynikmeczu.substring(pos + 1,wynikmeczu.length()));
+			golejakogosc=golejakogosc+wynikzmeczu;
+		}
+			int gole = golejakogosc+golejakogosp;
+			
+			Collection <String> c = #{dbConn.(Mecz.wynik)};
+			ArrayList<String> mecze =(ArrayList<String>) c;
+			int goleall = 0;
+			
+			for (String p : mecze){
+			wynikmeczu = p;
+			int pos = wynikmeczu.indexOf(":");
+			goleall=goleall+ Integer.parseInt(wynikmeczu.substring(pos + 1,wynikmeczu.length()));
+			int pos2 = wynikmeczu.indexOf(":");
+			goleall=goleall+ Integer.parseInt(wynikmeczu.substring(0, pos2));
+			
+		}
+			
+		
+		 float percentage = (gole*100/(goleall));
+		 return percentage;
+	}
+	
+	/**
+	 * QUERY 10 : Sprawdz ile razy druzyna posiadala czyste konto w meczach.
+	 */
+
+	public int DruzynaCzysteKonto (String nazwadruzyny){
+	
+	Collection<String> meczejakogospc = #{dbConn.((Mecz where druzyna.nazwa == nazwadruzyny).(wynik))};
+		ArrayList<String> meczejakogosp =(ArrayList<String>) meczejakogospc;
+	Collection<String> meczejakogosc2 = #{dbConn.((Mecz where druzyna2.nazwa == nazwadruzyny).(wynik))};
+		ArrayList<String> meczejakogosc =(ArrayList<String>) meczejakogosc2;
+	int iloscczystegokonta=0;
+		for (String p : meczejakogosp){
+			String wynikmeczu = p;
+			int pos2 = wynikmeczu.indexOf(":");
+			int gol = Integer.parseInt(wynikmeczu.substring(0, pos2));
+			
+			if (gol==0) {
+			iloscczystegokonta=iloscczystegokonta+1;
+			}
+			
+		}
+			for (String p : meczejakogosc){
+			String wynikmeczu2 = p;
+			int pos = wynikmeczu2.indexOf(":");
+			int gol2= Integer.parseInt(wynikmeczu2.substring(pos + 1,wynikmeczu2.length()));
+			
+				if (gol2==0) {
+						iloscczystegokonta=iloscczystegokonta+1;
+			}
+			
+		}
+	return iloscczystegokonta;
+	}
+	
+	/**
+	 * QUERY 11 : Sprawdz na którym stadionie pada najwiecej bramek
+	 */
+		public String  QueryStadionBramki() {
+			String nazwastadion ="";
+		Collection<String> stadiony2 = #{dbConn.(unique(Mecz.nazwa_stadionu))};
+			ArrayList<String> stadiony =(ArrayList<String>) stadiony2;
+		int golemax = 0;
+		
+		for (String nazwast:stadiony){
+		Collection<String> wynikizstadionu2 = #{dbConn.((Mecz where nazwa_stadionu==nazwast).(wynik))};
+		ArrayList<String> wynikizstadionu =(ArrayList<String>) wynikizstadionu2;
+		int goleall = 0;
+		for (String wynikmeczu2:wynikizstadionu){
+		String wynikmeczu =wynikmeczu2; 
+		//int goleall = 0;
+			int pos = wynikmeczu.indexOf(":");
+			goleall=goleall+ Integer.parseInt(wynikmeczu.substring(pos + 1,wynikmeczu.length()));
+			int pos2 = wynikmeczu.indexOf(":");
+			goleall=goleall+ Integer.parseInt(wynikmeczu.substring(0, pos2));
+			
+			if (goleall>golemax){
+			nazwastadion =nazwast;
+			goleall=golemax;
+			}
+		}
+		}
+		return nazwastadion;
+	}
+	
+	/**
+	 * QUERY 12 : Wyswietl druzyny i ich  liczbe zoltych i czerwonych kartek zsumowana
+	 */
+	
+		public Collection<Struct>  DruzynaNajbrutalniejsza() {
+	
+		 Collection<Struct> dr =  #{dbConn.(( Druzyna as druzyna ) 
+		 join (sum(PilkarzMecz as pm where pm.pilkarz in (druzyna.lista_zawodnikow)).(pm.liczba_zoltych_kartek + pm.liczba_czerwonych_kartek) as liczbakartek)
+		 )
+		 };
+
+		 return dr;
+	}
+	/**
+	 * QUERY 13 : Wyswietl przedzial pensji u  pilkarzy 
+	 */
+	 
+	public Collection<String> PilkarzePensjeprzedzial() {
+		Collection<String> res = #{
+			dbConn.(
+				((0 as i close by (i+100 where i <= max(Pilkarz.pensja)) as i)
+				join (count(Pilkarz where pensja >= i and pensja < i+100) as c)).
+				(c + " PilkarzY zarabia  pomiedzy  "+ i +" i " + (i+99)) as message
+			)
+		};
+		return res;
+	}
+	
+	/**
+	 * QUERY 14 : Wyswietl przedzial golii u  pilkarzy 
+	 */
+	
+	public Collection<String> PilkarzeIloscGoliPrzedzial() {
+	Collection<String> res = #{
+			dbConn.(
+				((0 as i close by (i+1 where i <= max(PilkarzMecz.ilosc_goli)) as i)
+				join (count(PilkarzMecz  where ilosc_goli >= i and ilosc_goli < i+1) as c)).
+				(c + " PilkarzY  strzelilo goli  pomiedzy "+ i +" i " + (i+1) + "golami") as message
+			)
+		};
+		
+		return res;
+	}
+	
+	/**
+	 * QUERY 14 : Wyswietl przedzial czerwonych kartek u  pilkarzy 
+	 */
+	
+	public Collection<String> PilkarzCzerwoneKartkiPrzedzial() {
+	Collection<String> res = #{
+			dbConn.(
+				((0 as i close by (i+1 where i <= max(PilkarzMecz.liczba_czerwonych_kartek)) as i)
+				join (count(PilkarzMecz  where liczba_czerwonych_kartek >= i and liczba_czerwonych_kartek < i+1) as c)).
+				
+				(c + " Pilkarzy zdobylo czerwonych kartek  pomiedzy  "+ i +" and " + (i+1)) as message
+			)
+		};
+		return res;
+	}
+	
+	/**
+	 * QUERY 15 : Wyswietl przedzial premii u trenerow  
+	 */
+	
+	public Collection<String> TrenerPremia() {
+	Collection<String> res = #{
+			dbConn.(
+				((0 as i close by (i+100 where i <= max(Trener.premia)) as i)
+				join (count(Trener  where premia >= i and premia < i+100) as c)).
+				(c + " Trenerow uzyskuje premie pomiedzy  "+ i +" i " + (i+100)) as message
+			)
+		};
+		
+	
+		return res;
+	}
+	
+	/**
+	 * QUERY 16 :Wyswietl druzyny
+	 */
+	 
+	public Collection<String>  DruzynyAll() {
+	
+	Collection<String> allCars = #{dbConn.(Druzyna.nazwa)};
+		return allCars;
+		 
+		
+	}
+	/**
+	 * QUERY 17 : Wyswietl obozy
+	 */
+	public Collection<Oboz>  ObozAll() {
+	
+	Collection<Oboz> allCars = #{dbConn.(Oboz)};
+		return allCars;
+		 
+		
+	}
+	/**
+	 * QUERY 18 : Sprawdz czy druzyna miala oboz 
+	 */
+	public Collection<Struct>  CheckObozDruzyna(String nazwadruzyny) {
+	
+	Collection<Struct> b = #{dbConn.(exists(Oboz as o)
+	join (Druzyna as d where d.nazwa==nazwadruzyny))};
+	
+		return b;
+		 
+		
+	}
+	/**
+	 * QUERY 19 : Wyswietl stroj druzyny 
+	 */
+	public Collection<Struct>  StrojDruzyny (String nazwadruzyny){
+	
+	Collection<Struct> allCars = #{dbConn.((Stroj as s)
+	join (Druzyna as d where d.nazwa == nazwadruzyny))};
+	
+		return allCars;
+		 
+		
+	}
+	
+	/**
+	 * QUERY 20 : Wyswietl zabiegi pilkarzy  
+	 */
+	
+	public Collection<Struct>  ZabiegiPilkarzy (){
+	
+	Collection<Struct> allCars = #{dbConn.((Zabieg as zabiegi)
+	join (Pilkarz as pilkarz where zabiegi.pilkarz ==pilkarz))};
+	
+		return allCars;
+		 
+		
+	}
+//	Wyswietl srednia,maksymalna i minimalna premie lekarzy 
+	/*public Collection<Struct>  SredniaMaxMinPremiiLekarzy (String nazwa2){
+	
+	Collection<Struct> deptAvgSal = #{
+			dbConn.(
+				Druzyna where nazwa==nazwa2  join min(listalekarzy.premia) as MinimalnaPremiaLekarzy, 
+				avg(listalekarzy.premia) as SredniaPremiaLekarzy, 
+				max(listalekarzy.premia) as MaksymalnaPremiaPilkarzy
+			)
+		};
+
+		return deptAvgSal;
+	}*/
+	
+	/**
+	 * QUERY 21 : Sprawdz czy prawda jest ze w druzynach nie ma zawodnika ktory ma premie 0
+	 */
+	
+	public Boolean SprawdzPilkarzePremiaZero() {
+	
+		Boolean res = #{
+			dbConn.(
+				all (Druzyna as d)
+				any ((d.lista_zawodnikow) as e)
+				(e.premia == 0)
+			)
+		};
+		return res;
+	}
+	
+	
+	/**
+	 * QUERY 22 : Sprawdz czy prawda jest ze jest druzyna która ma pilkarza w wieku wiekszego niz podany
+	 * 
+	 */
+	
+	public Boolean  SprawdzDruzynaPilkarzeWiek( int wiek2) {
+		Boolean res = #{
+			dbConn.(
+				all (Druzyna as d)
+				any ((d.lista_zawodnikow) as e)
+				(e.wiek >wiek2)
+			)
+		};
+		return res;
+	}
+	
+	/**
+	 * QUERY 23: Sprawdz czy istnieja druzyny ktorego srednia wieku pilkarzy w druzynie nie przekracza podanego przedzialu i  istnieje
+	 *  pilkarz ktory ma kontuzje
+	 */
+
+	public Collection<Druzyna> query22() {
+
+
+		Collection<Druzyna> res = #{
+			dbConn.( (Druzyna as d where 
+			(avg(d.lista_zawodnikow.wiek)>20 && avg(d.lista_zawodnikow.wiek)<40) 
+			&& (exists(d.lista_zawodnikow.kontuzja))))};
+		return res;
+	}
+	
+	
+	/**
+	 * QUERY 24: Sprawdz czy istnieja druzyny ktorego srednia premia  pilkarzy w druzynie nie przekracza podanego przedzialu i
+	 *  druzyna zagrala na wszystkich stadionach
+	 */
+
+	public Collection<Druzyna> query23() {
+	
+		Collection<Druzyna> res = #{
+			dbConn.( (Druzyna as d where 
+			(avg(d.lista_zawodnikow.premia)>20 && avg(d.lista_zawodnikow.premia)<40) 
+			&& (d.mecz.nazwa_stadionu in (unique(Mecz.nazwa_stadionu)))))};
+		return res;
+	}
+	
+	
+	/**
+	 * QUERY 25 : Query na optymalizacje : (Wyswietl miasto druzyn) - z martwe podzapytanie
+	 */
+	public Collection<String> Optymalizacja1 (String nazwadruzyny){
+	
+	Collection<String> allCars = #{dbConn.((Druzyna as druz).(druz.miasto as city ,druz.nazwa as name).(city))};
+	
+		return allCars;
+		 
+		
+	}
+	
+		/**
+	 * QUERY 26 : Query na optymalizacje2 - indeks ( Wyszukaj pilkarza ktory w meczu strzelil 5 goli)
+	 */
+	public Collection<PilkarzMecz> Optymalizacja2 (String nazwadruzyny){
+	
+	Collection<PilkarzMecz> allCars = #{dbConn.(PilkarzMecz where ilosc_goli == 5)
+	};
+	
+		return allCars;
+		 
+		
+	}
+	
+	
+		/**
+	 * QUERY 27 : Query na optymalizacje  niezalezne zapytania (Wyciagniecie nazw druzyny gdzie premia > sredniej premi lekarzy 
+	 */
+	public Collection<Lekarz> optymalizacje3 (String nazwadruzyny){
+	
+	Collection<Lekarz> res = #{
+			dbConn.(Lekarz where premia > avg(Lekarz.premia)
+			 )
+			};
+	
+		return res;
+		 
+		
+	}
+	
+	/*
+	*   BLEDY  BIBLIOTEKI  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	*
+	/*
+	/**
+	 * QUERY 12 : Sprawdz ktora druzyna jest najbrutaleniejsza ( najwieksza liczbe zoltych i czerwonych kartek) (BLAD) - indeks
+	 BLAD przy order by - trza zmienic w build.xml : optimiseIndependentQueries="false" 
+	 */
+	
+		//public Collection<Struct>  DruzynaNajbrutalniejszaNiedzialajace() {
+	
+		//Collection<Struct> dr =  #{dbConn.((( Druzyna as d ) 
+		// join (sum(PilkarzMecz as pm where pm.pilkarz in (d.lista_zawodnikow)).(pm.liczba_zoltych_kartek + pm.liczba_czerwonych_kartek) as s)
+		//) order by s
+		// )
+		// };
+
+		// return dr;
+//	}
+	
+	
+	/**
+	 * QUERY 28 : blad  (Gdy w klasie jest lista z elementami na przyklad
+	 * listazawodnikow to nie mozna sie dostac do pola ktore jest w klasie ktora rozszerza u mnie na przyklad :
+	 * Klasa Osoba rozszerza Pilkarza i nie mozna sie dostac do pola pensja ktore jest dziedziczone z osoboy
+	 */
+	//public Collection<Struct> BLAD2 (String nazwadruzyny){
+	
+	//Collection<Druzyna> res = #{
+		//	dbConn.( (Druzyna as d where 
+			//(avg(d.lista_zawodnikow.pensja)>20 && avg(d.lista_zawodnikow.pensja)<40) 
+		//&& (exists(d.lista_zawodnikow.kontuzja)))
+			//)
+			//};
+	
+		//return allCars;
+		 
+		
+//	}
+	
+	
+	
+	
+	//z count i equals
+	public boolean queryEquals(String nazwadruzyny,String nazwadruzyny2,boolean equals){
+	boolean eq ;
+	double count1=#{dbConn.(count(Mecz where druzyna.nazwa == nazwadruzyny))};
+	double count2 =#{dbConn.(count(Mecz where druzyna.nazwa == nazwadruzyny2))};
+	if (equals==true){
+	eq = #{count1==count2};
+	}
+	else {eq = #{count1!=count2};}
+	return eq;
+	}
+
+	
+	// POMOCNICZE 
+	public ArrayList QueryPom1ForQuery3() {
+		
+		Collection<Druzyna> allCars2 = #{dbConn.(Mecz.druzyna)};
+		ArrayList<Druzyna> allCars =(ArrayList<Druzyna>) allCars2;
+		return allCars;
+	}
+		public double QueryPom2ForQuery3(String nazwadruzyny) {
+	
+		double allCars = #{dbConn.(count(Mecz where druzyna.nazwa == nazwadruzyny))};
+		return allCars;
+	}
+}

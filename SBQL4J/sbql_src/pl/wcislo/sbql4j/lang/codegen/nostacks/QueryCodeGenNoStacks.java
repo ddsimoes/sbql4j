@@ -128,9 +128,7 @@ public class QueryCodeGenNoStacks extends QueryCodeGenerator<Object, Object> {
 		
 		String identLoopVar = expr.getNestedVarName();
 		String identLeftRes = expr.ex1.getSignature().getResultName();
-		
-		
-		
+			
 		sb.append(expr.getSignature().genJavaDeclarationCode()+" = new ArrayList<"+expr.getSignature().getJavaTypeStringSingleResult()+">(); \n");
 		if(expr.ex1.getSignature().getColType() != SCollectionType.NO_COLLECTION) {
 			sb.append("	"+identResult+".addAll("+identLeftRes+"); \n");	
@@ -690,7 +688,7 @@ public class QueryCodeGenNoStacks extends QueryCodeGenerator<Object, Object> {
 		expr.ex1.accept(this, object);
 		String identLeftResult = expr.ex1.getSignature().getResultName();
 		if(sLeft.getColType() == SCollectionType.NO_COLLECTION) {
-			sb.append(sLeft.genJavaDeclarationCode()+" = "+identLeftResult+"; \n");
+			sb.append(sRes.genJavaDeclarationCode()+" = "+identLeftResult+"; \n");
 			return object;
 		}
 		sb.append(sRes.genJavaDeclarationCode()+" = new "+sRes.getJavaTypeStringAssigment()+"(); \n");

@@ -579,7 +579,11 @@ public class TypeChecker implements TreeVisitor {
 			e.accept(this, object);	
 		}
 		Signature resSig = sLeft.clone();
-		resSig.setColType(SCollectionType.SEQUENCE);
+		if(sLeft.getColType() != SCollectionType.NO_COLLECTION) {
+			resSig.setColType(SCollectionType.SEQUENCE);	
+		} else {
+			resSig.setColType(SCollectionType.NO_COLLECTION);
+		}
 		expr.setSignature(resSig);
 		return object;
 	}

@@ -17,7 +17,7 @@ public class RunCurrentTest {
 //		String baseDir = "E:\\Java\\workspaces\\mgr\\JavaCompiler\\";
 //		String baseDir = "E:\\Szkoła\\zajecia\\jps\\workspace\\JavaCompiler\\";
 		String baseDir = ".\\";
-		String baseDirDb4o = "..\\db4oj_sbql4j\\";
+		String baseDirDb4o = "..\\db4oj\\";
 	    File destDir = new File(baseDir + "dist");
 	    if(destDir.exists()) {
 	    	FileUtils.deleteQuietly(destDir);
@@ -47,7 +47,10 @@ public class RunCurrentTest {
 //	    	new File(baseDir + "currentTest\\edu\\pjwstk\\jps\\ExampleData.s4j")
 //	    	new File(baseDir + "currentTest\\edu\\pjwstk\\jps\\JPSQueries1.s4j")
 //	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\xml\\XMLQuerySimpleTest.s4j"),
-	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\closeby\\CloseByTest.s4j"),
+//	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\closeby\\CloseByTest.s4j"),
+//	    	new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\inheritance\\InheritanceTest.s4j"),
+//    		new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\struct\\StructTest.s4j"),
+    		new File(baseDir + "currentTest\\pl\\wcislo\\sbql4j\\javac\\test\\football\\query\\KORQueries.s4j"),
 	    };
 	    String classpath = baseDir + "classes;"+ baseDir + "config;"+baseDirDb4o+"bin;";
 	    CodeGenType cgt = CodeGenType.NO_STACKS;
